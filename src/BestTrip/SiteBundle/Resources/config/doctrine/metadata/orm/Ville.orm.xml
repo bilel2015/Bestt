@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Ville" table="ville">
+        <indexes>
+            <index name="pk_pays" columns="id_pays"/>
+        </indexes>
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="nom" type="string" column="nom" length="255" nullable="true"/>
+        <field name="nbrRec" type="integer" column="nbr_rec" nullable="true"/>
+        <field name="nbrNonRec" type="integer" column="nbr_non_rec" nullable="true"/>
+        <field name="rating" type="float" column="rating" precision="10" scale="0" nullable="true"/>
+        <field name="nbrRating" type="integer" column="nbr_rating" nullable="true"/>
+        <many-to-one field="idPays" target-entity="Pays">
+            <join-columns>
+                <join-column name="id_pays" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-many field="idCommentaire" target-entity="Commentaire" mapped-by="idVille"/>
+    </entity>
+</doctrine-mapping>

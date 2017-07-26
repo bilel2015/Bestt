@@ -1,0 +1,257 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li><a href="{{ path('lieu') }}">Lieux</a></li>
+            <li>{{ entity.nom }}</li>
+        </ul>
+    </section>
+    <!-- End Breakcrumb -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Êtes-vous sûre de vouloir supprimer ce contenu?</h4>
+                </div>
+                <div class="modal-footer">
+                    <table class="float-right">
+                        <tr>
+                            <td class="">
+                                <button type="button" class="margin-right btn btn-default" data-dismiss="modal">
+                                    Non
+                                </button>
+                            </td>
+                            <td>
+                                {{ form(delete_form) }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Detail -->
+    <section class="head-detail">
+        <div class="head-dt-cn">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="start-address">
+                        <span class="h1 padding-left">{{ entity.nom }}</span> -
+                        <span class="star">
+                        {% if entity.rating != 0 %}
+                            {% for  i in 1.. entity.rating %}
+                                <i class="fa fa-star"></i>
+                            {% endfor %}
+
+                            {% if (entity.rating|round(0, 'floor')) != 0 and entity.rating / (entity.rating|round(0,'floor'))  != 1  and entity.rating != (entity.rating|round(0,'floor')) %}
+                            <i class="fa fa-star-half-full"></i>
+                        {% endif %}
+                            {% else %}
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        {% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-5 text-right">
+                    <p class="price-book">
+                        {% if app.user == entity.user %}
+                            <a href="{{ path('lieu_edit',{'id':entity.id}) }}" title=""
+                               class="awe-btn awe-btn-lager btn-warning">Modifier</a>
+                            {{ form(delete_form) }}
+                        {% endif %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {% if not(entity.valid) %}
+                                <a href="{{ path('valider_lieu',{'lieu':entity.id, 'valid': 1}) }}" title=""
+                                   class="awe-btn awe-btn-lager btn-warning">Valider</a>
+                            {% else %}
+                                <a href="{{ path('valider_lieu',{'lieu':entity.id, 'valid': -1}) }}" title=""
+                                   class="awe-btn awe-btn-lager btn-danger">Rejeter</a>
+                            {% endif %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Header Detail -->
+
+    <!-- Detail Slide -->
+    <section class="detail-slider">
+        <!-- Lager Image -->
+        <div class="slide-room-lg">
+            <div id="slide-room-lg">
+                <img src="{{ asset(entity.image.path) }}" alt="">
+            </div>
+        </div>
+        <!-- End Lager Image -->
+    </section>
+    <!-- End Detail Slide -->
+
+    <!-- Hotel Content One -->
+    <section class="hotel-content detail-cn" id="hotel-content">
+        <div class="row">
+            <div class="col-lg-3 detail-sidebar">
+                <!-- Hight Light -->
+                <div class="hight-light">
+
+                    <h2>Les avis</h2>
+                    <!-- Vote Text -->
+                    <div class="row">
+
+                        <!-- Recommend -->
+                        <div class="col-xs-6 col-sm-6 col-md-3 col-lg-6 vote-text">
+                            <p><span>{{ entity.rating | round(1) }}</span></p>
+                            {% set voted = false %}
+                            {% for user in entity.ratings %}
+                                {% if app.user == user %}
+                                    {% set voted = true %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if is_granted('ROLE_USER') and voted == false %}
+                                <form action="{{ path('lieu_vote', {'lieu':entity.id}) }}">
+                                    <input type="number" class="form-control" min="0" max="5" name="rating"/> <br/>
+                                    <button class="btn btn-success">Votez</button>
+                                </form>
+                            {% else %}
+                                <a href="#" title="">{{ entity.nbrRating }} membres ont noté ce lieu.</a>
+                            {% endif %}
+                        </div>
+                        <!-- End Recommend -->
+                        <!-- Tripadvitsor -->
+                        <div class="col-xs-6 col-sm-6 col-md-3 col-lg-6  vote-text">
+                        <span>
+                            <span class="s30">{{ entity.nbrRec }} </span>
+                            <a href="{{ path('lieu_recommend', {'lieu':entity.id, 'state':1} ) }}">
+                                <i class="fa fa-thumbs-o-up c049905 s30"></i>
+                            </a>
+                        </span>
+                            <hr/>
+                        <span>
+                            <span class="s30">{{ entity.nbrNonRec }} </span>
+                             <a href="{{ path('lieu_recommend', {'lieu':entity.id, 'state':-1} ) }}">
+                                 <i class="fa fa-thumbs-o-down cCC0101 s30"></i>
+                             </a>
+                        </span>
+                        </div>
+                        <!-- End Tripadvitsor -->
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
+                            <hr class="hr">
+
+                            <!-- Quote -->
+
+                            <!-- End Quote -->
+                        </div>
+                    </div>
+                    <!-- End Vote Text -->
+
+
+                </div>
+                <!-- End Hight Light -->
+            </div>
+
+            <!-- Description -->
+            <div class="col-lg-9 hl-customer-like">
+
+                {% for flashMessage in app.session.flashbag.get('warning') %}
+                    <div class="alert alert-warning margin-top">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <div class="alert alert-success margin-top">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+                <h2>Description</h2>
+
+                <!-- Custom link field -->
+                <div class="customer-like">
+                    <ul>
+                        <li>{{ entity.description }}</li>
+                    </ul>
+                </div>
+                <!-- End Custom link field -->
+                <h2>Emplacement</h2>
+
+                <div class="row map-item">
+
+                </div>
+
+                <h2>Commentaires</h2>
+
+                <div class="review-all">
+                    {% for comment in entity.commentaires %}
+                        <!-- Review Item -->
+                        <div class="row review-item" style="background: none repeat scroll 0% 0% rgb(255, 255, 255);">
+                            <div class="col-xs-3 review-number">
+                                <ins><img src="{% if comment.user.image %}
+                                         {{ asset(comment.user.image.path) }}
+                                    {% else %}
+                                         {{ asset('/images/profile/prof.png') }}
+                                    {% endif %}" style="border-radius: 100%"/></ins>
+                                <span>{{ comment.user.nom | upper }} {{ comment.user.prenom }}</span>
+                                <small>{{ comment.dateCreation | date('d-m-Y H:i') }}</small>
+                            </div>
+                            <div class="col-xs-9 review-text">
+                                {% if comment.good or comment.bad %}
+                                    <ul>
+                                        {% if comment.good %}
+                                            <li><span class="icon fa fa-plus"></span>{{ comment.good }}</li>
+                                        {% endif %}
+                                        {% if comment.bad %}
+                                            <li><span class="icon icon-minus fa fa-minus"></span>{{ comment.bad }}</li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                                <p>{{ comment.contenu }}</p>
+                            </div>
+                        </div>
+                        <!-- End Review Item -->
+                    {% else %}
+                        <h4>Il n'y a aucun commentaire!</h4>
+                    {% endfor %}
+                    {% if is_granted('ROLE_USER') %}
+                        <div class="">
+                            <form action="{{ path('lieu_comment', {'lieu':entity.id}) }}">
+                                <table class="table">
+                                    <tr>
+                                        <td>
+                                            <textarea class="form-control resize-off" name="comment" id="" cols="20"
+                                                      rows="6"
+                                                      required="required"></textarea>
+                                        </td>
+                                        <td>
+                                            <input class="form-control" name="good" placeholder="Points positives"
+                                                   type="text"/><br/>
+                                            <input class="form-control" name="bad" placeholder="Points négatives"
+                                                   type="text"/><br/>
+                                            <button type="submit" class="btn btn-default">Ajouter</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+
+{% endblock %}

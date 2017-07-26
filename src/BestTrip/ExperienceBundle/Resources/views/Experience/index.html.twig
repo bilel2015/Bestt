@@ -1,0 +1,68 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+    <div class="row">
+
+        <!-- Cruise Right -->
+        <div class="col-lg-12">
+
+            <!-- Breakcrumb -->
+            <section class="breakcrumb-sc">
+                <ul class="breadcrumb arrow">
+                    <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+                    <li><a href="#" title="">Experiences </a></li>
+                </ul>
+            </section>
+            <!-- End Breakcrumb -->
+
+            <section class="cruise-list">
+                <!-- Cruise Content -->
+                <div class="cruise-list-cn">
+                    {% for entity in entities %}
+                        <div class="cruise-item">
+                            <figure class="cruise-img">
+                                <a href="{{ path('experience_show', { 'id': entity.id }) }}">
+                                    <img src="{{ asset(entity.image.path) }}" alt="">
+                                </a>
+                            </figure>
+                            <div class="cruise-text">
+                                <div class="cruise-name">
+                                    <a href="{{ path('experience_show', { 'id': entity.id }) }}">{{ loop.index }}
+                                        - {{ entity.titre }}</a>
+                                </div>
+                                <ul class="ship-port">
+                                    <li>
+                                        <span class="label">Date d'ajout:</span>
+                                        {{ entity.dateAjout }}
+                                    </li>
+                                    <li>
+                                        <span class="label">Description:</span>
+                                        {{ entity.description }}...
+                                    </li>
+                                </ul>
+                                <div class="price-box">
+                <span class="price">
+                    Dépenses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                    <ins>${{ entity.depenses }}</ins>
+                </span>
+                                    {% if is_granted('ROLE_USER') %}
+                                        <span class="price night">
+                    <small><a href="{{ path('experience_edit', { 'id': entity.id }) }}">Modifier</a></small>
+                </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {{ knp_pagination_render(entities) }}
+                <!-- End Cruise Content -->
+            </section>
+        </div>
+        <!-- End Cruise Right -->
+
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,256 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <!-- Breakcrumb -->
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="index-2.html"><i class="fa fa-home"></i></a></li>
+            <li>Contact us
+            </li>
+        </ul>
+    </section>
+    <!-- End Breakcrumb -->
+    <section class="contact-page">
+        <div class="contact-maps">
+        </div>
+        <div class="contact-cn">
+            <h2>Contribution au guide #{{ entity.id }}</h2>
+            <form action="{{ path('guide_contribute_update', {'id':entity.id}) }}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <table class="table">
+                            {% for flashMessage in app.session.flashbag.get('error_image') %}
+                                <tr class="alert alert-danger">
+                                    <td colspan="2">
+                                        {{ flashMessage }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>Description</td>
+                                <td><textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button class="awe-btn awe-btn-1 arrow-right arrow-white awe-btn-lager"
+                                            type="submit">Ajouter le guide
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <input type="hidden" value="0" name="nbre-instances-ville"
+                           id="nbre-instances-ville"/>
+                    <input type="hidden" value="0" name="nbre-instances-lieu"
+                           id="nbre-instances-lieu"/>
+                    <input type="hidden" value="0" name="nbre-instances-autre"
+                           id="nbre-instances-autre"/>
+
+                    <div class="col-md-6">
+                        <table class="table">
+                            <tr id="other-btn">
+                                <td colspan="3">
+                                    <button id="ville" type="button" onclick="$villes.addLine()"
+                                            class="btn awe-btn awe-btn-1 "><i class="fa fa-plus"></i> Une ville
+                                    </button>
+                                    <button id="lieux" type="button" onclick="$lieux.addLine()"
+                                            class="btn awe-btn awe-btn-1"><i class="fa fa-plus"></i> Un lieu
+                                    </button>
+                                    <button class="btn awe-btn awe-btn-1 autreInfo" type="button"  onclick="$autres.addLine()"
+                                            id="autreInfo"><i class="fa fa-plus"></i> Autre information
+                                    </button>
+                                </td>
+                            </tr>
+                            {% for k,v in entity.villes %}
+                                <tr id="-o-ville-{{ v.id }}">
+                                    <td>Ville {{ k+1 }} </td>
+                                    <td>{{ v.nom }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                            {% for k,l in entity.lieux %}
+                                <tr id="-o-lieu-{{ l.id }}">
+                                    <td>
+                                        {% if l.isHotel %}Hôtel{% endif %}><
+                                        {% if l.isResto %}Restaurent{% endif %}>
+                                        {% if l.isMonument %}Monument{% endif %}
+                                    </td>
+                                    <td>{{ h.nom }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                            {% for k,v in entity.autres | json_decode %}
+                                <tr>
+                                    <td>{{ k }}</td>
+                                    <td>{{ v }}</td>
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+
+                            <tr class="hidden other-fields"></tr>
+                        </table>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+    <div class="hidden hidden-villes">
+        {% for v1 in villes %}
+            <option value="{{ v1.id }}">{{ v1.nom }}</option>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+
+        $villes = {
+            addTagInput: function (a) {
+                return '<td>Ville ' + (a * 1 + 1) + '</td><td><select class="form-control current-ville" name="ville-' + $('#nbre-instances-ville').val() + '">' + $('.hidden-villes').html() + '</select></td>';
+            },
+            addClose: function (a) {
+                return '<td>' +
+                        '<button type="button" onclick="$villes.supprimer(this)" class="no-padding btn btn-circle btn-danger">' +
+                        '<i class="fa fa-minus"></i>' +
+                        '</button>' +
+                        '</td>';
+            },
+            supprimer: function (a) {
+                b = $('#nbre-instances-ville').val();
+                b--;
+                $('#nbre-instances-ville').attr('value', b);
+                $('#' + a.parentNode.parentNode.id).remove();
+            },
+            createLine: function () {
+                b = $('#nbre-instances-ville').val();
+                line = "<tr id='ville-" + b.toString() + "'>" +
+                        "<input type=\"hidden\" name=\"ville-" + b + "\"/>" +
+                        this.addTagInput(b) +
+                        this.addClose(b) +
+                        "</tr>";
+                (b)++;
+                $('#nbre-instances-ville').attr('value', b);
+                return line;
+            },
+            addLine: function () {
+                $('.other-fields').before(this.createLine());
+            },
+            villes: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ path('ajouter_ville_guide') }}",
+                    data: "pays=" + $('.pays').val(),
+                    success: function (server_response) {
+                        $('.hidden-villes, .current-ville').html(server_response);
+                    }
+                })
+            }
+        };
+        $lieux = {
+            addClose: function (a) {
+                return '<td>' +
+                        '<button type="button" onclick="$lieux.supprimer(this)" class="no-padding btn btn-circle btn-danger">' +
+                        '<i class="fa fa-minus"></i>' +
+                        '</button>' +
+                        '</td>';
+            },
+            addTagSelect1: function (a, b) {
+                return '<td>' +
+                        '<select class="form-control" onchange="$lieux.getLieux(' + b + ')" name="' + a + '-' + b + '" id="type-lieu-' + b + '">' +
+                        '<option value="-1">Type du lieu</option>' +
+                        '<option value="H">Hôtel</option>' +
+                        '<option value="R">Restaurent</option>' +
+                        '<option value="M">Monument</option>' +
+                        '</select>' +
+                        '</td>';
+            },
+            addTagSelect2: function (a, b) {
+                return '<td>' +
+                        '<select class="form-control" name="' + a + '-' + b + '" id="content-lieu-' + b + '">' +
+                        '</select>' +
+                        '</td>';
+            },
+            supprimer: function (a) {
+                b = $('#nbre-instances-lieu').val();
+                b--;
+                $('#nbre-instances-lieu').attr('value', b);
+                console.log(a.parentNode.parentNode.id);
+                $('#' + a.parentNode.parentNode.id).remove();
+            },
+            createLine: function () {
+                b = $('#nbre-instances-lieu').val();
+                line = "<tr id='lieu-" + b.toString() + "'>" +
+                        "<input type=\"hidden\" value='" + b + "' name=\"lieu-" + b + "\"/>" +
+                        this.addTagSelect1('type-lieu', b) +
+                        this.addTagSelect2('content-lieu', b) +
+                        this.addClose(b) +
+                        "</tr>";
+                (b)++;
+                $('#nbre-instances-lieu').attr('value', b);
+                return line;
+            },
+            addLine: function () {
+                $('.other-fields').before(this.createLine());
+            },
+            getLieux: function (b) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ path('ajouter_lieu_guide') }}",
+                    data: "pays={{ entity.pays.id }}&typeL=" + $('#type-lieu-' + b).val(),
+                    success: function (server_response) {
+                        $('#content-lieu-' + b).html(server_response);
+                    }
+                })
+            }
+        };
+
+        $autres = {
+            addTagInput: function (a, b, c) {
+                return '<td><input class="form-control" required type="text" name="' + a + '-' + b + '" placeholder="' + c + '"/></td>';
+            },
+            addTextArea: function(a, b, c){
+                return '<td><textarea class="form-control" required name="'+a+'-'+b+'" placeholder="'+c+'"/></td>';
+            },
+            addClose: function (a) {
+                return '<td>' +
+                        '<button type="button" onclick="$autres.supprimer(this)" class="no-padding btn btn-circle btn-danger">' +
+                        '<i class="fa fa-minus"></i>' +
+                        '</button>' +
+                        '</td>';
+            },
+            supprimer: function (a) {
+                b = $('#nbre-instances-autre').val();
+                (b)--;
+                $('#nbre-instances-autre').attr('value', b);
+                console.log(a.parentNode.parentNode.id);
+                $('#' + a.parentNode.parentNode.id).remove();
+            },
+            createLine: function () {
+                b = $('#nbre-instances-autre').val();
+                line = "<tr id='autre" + b.toString() + "'>" +
+                        "<input type=\"hidden\" name=\"autre-" + b + "\" value='-1'/>" +
+                        this.addTagInput('libele-autre', b, 'Libellé ' + (b * 1 + 1)) +
+                        this.addTextArea('contenu-autre', b, 'Text') +
+                        this.addClose(b) +
+                        "</tr>";
+                (b)++;
+                $('#nbre-instances-autre').attr('value', b);
+                return line;
+            },
+            addLine: function () {
+                $('.other-fields').before(this.createLine());
+            }
+        };
+    </script>
+{% endblock %}

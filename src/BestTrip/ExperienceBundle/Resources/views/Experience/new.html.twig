@@ -1,0 +1,299 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <!-- Breakcrumb -->
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li><a href="{{ path('experience') }}" title="">Experiences </a></li>
+            <li><a href="#" title="">Ajout d'une experience</a></li>
+        </ul>
+    </section>
+    <!-- End Breakcrumb -->
+    <section class="contact-page bg-diamond">
+        <div class="contact-cn">
+            <h2>Ajouter une experience</h2>
+            {{ form_errors(form) }}
+
+            <form action="{{ path('experience_create') }}" class="form-contact" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <table class="table">
+                            {% for flashMessage in app.session.flashbag.get('error_image') %}
+                                <tr class="alert alert-danger">
+                                    <td colspan="2">
+                                        {{ flashMessage }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>Titre</td>
+                                <td>{{ form_widget(form.titre, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>{{ form_widget(form.description, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Image</td>
+                                <td><input type="file" name="imageName" class=""/></td>
+                            </tr>
+                            <tr>
+                                <td>Depenses</td>
+                                <td>{{ form_widget(form.depenses, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button class="awe-btn awe-btn-1 arrow-right arrow-white awe-btn-lager"
+                                            type="submit">Ajouter l'experience
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <input type="hidden" value="1" name="nbre-instances-voyage" id="nbre-instances-voyage"/>
+                    <button id="voyages" type="button" onclick="$voyages.addForm()"
+                            class="btn btn-default"><i class="fa fa-plus"></i> Un voyage
+                    </button>
+                    <!-- Accordion 1 -->
+                    <div class="panel">
+                        <div class="panel-heading" id="heading0">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse0">
+                                    Voyage #1
+                                    <span class="icon fa fa-angle-down"></span>
+                                </a>
+                            </h4>
+
+                        </div>
+                        <div id="collapse0" class="panel-collapse collapse" aria-labelledby="heading0">
+                            <div class="panel-body">
+                                <!-- start voyage -->
+                                <div class="col-md-6">
+                                    <table class="table">
+                                        <input type="hidden" value="-1" name="voyage0">
+                                        <tr>
+                                            <td>
+                                                <div class="form-search clearfix">
+                                                    <div class="form-field field-date">
+                                                        <input type="text" name="dateDepart0" class="field-input calendar-input" placeholder="Date de départ">
+                                                    </div>
+                                                </div></td>
+                                            <td><div class="form-search clearfix">
+                                                    <div class="form-field field-date">
+                                                        <input type="text" name="dateArrivee0" class="field-input calendar-input" placeholder="Date d'arrivée">
+                                                    </div>
+                                                </div></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ville de départ</td>
+                                            <td>
+                                                <div class="form-search clearfix">
+                                                        <select  class="form-control" name="villeDep0">
+                                                            <option id="" disabled selected>De quelle ville avez-vous déparé ?</option>
+                                                            {% for i in ville %}
+                                                                <option value="{{i.id}}">{{i.nom}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ville d'arrivée</td>
+                                            <td>
+                                                <select class="form-control" name="villeArr0">
+                                                    <option id="" disabled selected>Vous êtes arrivé à quelle ville ?</option>
+                                                    {% for i in ville %}
+                                                        <option value="{{i.id}}">{{i.nom}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Saison</td>
+                                            <td>
+                                                <select class="form-control" name="saison0">
+                                                    <option id="" disabled selected>Pendant quelle saison avez-vous voyagé ?</option>
+                                                    <option value="0">Automne</option>
+                                                    <option value="1">Hiver</option>
+                                                    <option value="2">Printemps</option>
+                                                    <option value="3">Ete</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Moyen de transport</td>
+                                            <td>
+                                                <select class="form-control" name="transport0">
+                                                    <option id="" disabled selected>Quel moyen de transport avez-vous utilisé ?</option>
+                                                    <option value="0">Voiture personnelle</option>
+                                                    <option value="1">Train</option>
+                                                    <option value="2">Avion</option>
+                                                    <option value="3">Bateau</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Compagnie de voyage</td>
+                                            <td>
+                                                <select class="form-control" name="compagnie0">
+                                                    <option id="" disabled selected>Avec quelle compagnie avez-vous voyagé ?</option>
+                                                    {% for i in compagnieDeVoyage %}
+                                                        <option value="{{i.id}}">{{i.nom}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <td>
+                        <button type="button" onclick=$voyages.supprimer(this) class="no-padding btn btn-circle btn-danger">
+                        <i class="fa fa-minus"></i>
+                        </button>
+                        </td>
+                                    </table>
+                                </div>
+                                <!-- end voyage -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Accordion 1 -->
+                    <input type="hidden" class="hidden other-fields">
+                </div>
+            </form>
+        </div>
+
+    </section>
+
+    <div class="hidden hidden-voyages">
+
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $voyages = {
+            addClose: function (a) {
+                return '<td>' +
+                        '<button type="button" onclick="$voyages.supprimer(this)" class="no-padding btn btn-circle btn-danger">' +
+                        '<i class="fa fa-minus"></i>' +
+                        '</button>' +
+                        '</td>';
+            },
+            supprimer: function (a) {
+                b = $('#nbre-instances-voyage').val();
+                $('#nbre-instances-voyage').attr('value', b);
+                console.log(a.parentNode.parentNode.id);
+                $('#' + a.parentNode.parentNode.id).remove();
+            },
+            createLine: function () {
+                b = $('#nbre-instances-voyage').val();
+                line = '<div class="panel col-md-push-6">' +
+                        '<div class="panel-heading" id="heading' + (b * 1 + 1).toString() + '">' +
+                        '<h4 class="panel-title">' +
+                        '<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse' + (b * 1 + 1).toString() + '">' +
+                        'Voyage #' + (b * 1 + 1).toString() +
+                        '<span class="icon fa fa-angle-down"></span>' +
+                        '</a>' +
+                        '</h4>' +
+                        '</div>' +
+                        '<div id="collapse' + (b * 1 + 1).toString() + '" class="panel-collapse collapse" aria-labelledby="heading' + (b * 1 + 1).toString() + '">' +
+                        '<div class="panel-body">' +
+                        '<div class="col-md-6">' +
+                        '<table class="table">' +
+                        '<tr>' +
+                        '<td>' +
+                        '<div class="form-search clearfix">' +
+                        '<div class="form-field field-date">' +
+                        '<input type="text" name="dateDepart' + b.toString() + '" class="field-input calendar-input" placeholder="Date de départ">' +
+                        '</div>' +
+                        '</div></td>' +
+                        '<td><div class="form-search clearfix">' +
+                        '<div class="form-field field-date">' +
+                        '<input type="text" name="dateArrivee' + b.toString() + '" class="field-input calendar-input" placeholder="Date d\'arrivée">' +
+                        '</div>' +
+                        '</div></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Ville de départ</td>'+
+                        '<td>' +
+                        '<div class="form-search clearfix">' +
+                        '<select class="form-control" name="villeDep' + b.toString() + '">' +
+                        '<option id="" disabled selected>De quelle ville avez-vous déparé ?</option>' +
+                        '{% for i in ville %}' +
+                        '<option value="{{i.id}}">{{i.nom}}</option>' +
+                        '{% endfor %}' +
+                        '</select>' +
+                        '</div>' +
+                        '</td>' +
+                        '</tr><tr>' +
+                        '<td>Ville d\'arrivée</td>'+
+                        '<td>' +
+                        '<select class="form-control" name="villeArr' + b.toString() + '">' +
+                        '<option id="" disabled selected>Vous êtes arrivé à quelle ville ?</option>' +
+                        '{% for i in ville %}' +
+                        '<option value="{{i.id}}">{{i.nom}}</option>' +
+                        '{% endfor %}' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Saison</td>'+
+                        '<td>' +
+                        '<select class="form-control" name="saison' + b.toString() + '">' +
+                        '<option id="" disabled selected>Pendant quelle saison avez-vous voyagé ?</option>' +
+                        '<option name="0">Automne</option>' +
+                        '<option name="1">Hiver</option>' +
+                        '<option name="2">Printemps</option>' +
+                        '<option name="3">Ete</option>' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Moyen de transport</td>'+
+                        '<td>' +
+                        '<select class="form-control" name="transport' + b.toString() + '">' +
+                        '<option id="" disabled selected>Quel moyen de transport avez-vous utilisé ?</option>' +
+                        '<option name="0">Voiture personnelle</option>' +
+                        '<option name="1">Train</option>' +
+                        '<option name="2">Avion</option>' +
+                        '<option name="3">Bateau</option>' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Compagnie de voyage</td>'+
+                        '<td>' +
+                        '<select class="form-control" name="compagnie' + b.toString() + '">' +
+                        '<option id="" disabled selected>Avec quelle compagnie avez-vous voyagé ?</option>' +
+                        '{% for i in compagnieDeVoyage %}' +
+                        '<option value="{{i.id}}">{{i.nom}}</option>' +
+                        '{% endfor %}' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>' +
+                        '</table>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                this.addClose(b) +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                (b)++;
+                $('#nbre-instances-voyage').attr('value', b);
+                return line;
+            },
+            addForm: function () {
+                $('.other-fields').before(this.createLine());
+            }
+        };
+    </script>
+{% endblock %}

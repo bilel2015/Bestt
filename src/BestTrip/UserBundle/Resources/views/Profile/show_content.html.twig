@@ -1,0 +1,60 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% block body %}
+    <!-- Breakcrumb -->
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li>Mon profil
+            </li>
+        </ul>
+    </section>
+    <section class="contact-page margin-top">
+        <div class="row">
+            <!-- Hotel Right -->
+            <div class='col-md-1'>
+            </div>
+            <div class='col-md-2'>
+                {% if user.image %}
+                    <img src='{{ asset(user.image.path) }}' width='200px' class='float-left'/>
+
+                {% else %}
+                    <img src='{{ asset('images/profile/prof.png') }}' width='200px' class='float-left'/>
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <dl class="dl-horizontal">
+                    <dt>Identifiant</dt>
+                    <dd>{{ user.username }}</dd>
+                    <dt>E-mail</dt>
+                    <dd>{{ user.email }}</dd>
+                    <dt>Nom</dt>
+                    <dd>{{ user.nom }}</dd>
+                    <dt>Prenom</dt>
+                    <dd>{{ user.prenom }}</dd>
+                    <dt>Sexe</dt>
+                    <dd>{{ user.sexe }}</dd>
+                    <dt>Date de naissance</dt>
+                    <dd>{{ user.dateNaissance | date('d-m-Y') }}</dd>
+                    <dt>Biographie</dt>
+                    <dd>{{ user.bio }}</dd>
+                    <dt></dt>
+                    <dd class="margin-top">
+                        {% if user == app.user %}
+                            <a class="btn btn-warning" href="{{ path("user_edit",{'id':user.id}) }}">Modifier</a>
+                            <a class="btn btn-danger" href="{{ path("fos_user_change_password") }}">Changer mon mot de
+                                passe</a>
+                        {% endif %}
+                        {% if user != app.user %}
+
+                            <a class="btn btn-success" href="{{ path('conversation_by_user',{'user':user.id}) }}">Contactez
+                                moi</a>
+                        {% endif %}
+
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+    </section>
+{% endblock %}

@@ -1,0 +1,30 @@
+security:
+    encoders:
+        BestTrip\UserBundle\Entity\User: plaintext
+
+    role_hierarchy:
+        ROLE_USER:  ROLE_USER
+        ROLE_ADMIN: ROLE_ADMIN
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        main:
+            pattern: ^/
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+#            default_target_path:
+            logout:       true
+            anonymous:    true
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/messages/, role: ROLE_USER }
+        - { path: ^/(\w+)/new, roles: ROLE_USER }
+        - { path: ^/(\w+)/(\d+)/(edit|delete|recommend|vote|contribute), roles: ROLE_USER }

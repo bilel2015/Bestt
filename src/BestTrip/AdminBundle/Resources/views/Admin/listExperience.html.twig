@@ -1,0 +1,35 @@
+{% extends "::admin.html.twig" %}
+
+{% block header %}Liste des experienc{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <table class="table">
+                        <tr>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>Date d'ajout</th>
+                            <th>Utilisateur</th>
+                            <th>Actions</th>
+                        </tr>
+                        {% for e in experiences %}
+                            <tr class="{% if e.valid %}alert-success{% else %}alert-danger{% endif %}">
+                                <td>{{ e.titre }}</td>
+                                <td>{{ e.description }}</td>
+                                <td>{{ e.dateAjout | date('d-m-Y H:i') }}</td>
+                                <td><a href="#">{{ e.user.nom | upper }} {{ e.user.prenom }}</a></td>
+                                <td>
+                                    <a href="{{ path('experience_show', { 'id': e.id }) }}"
+                                       class="btn btn-primary btn-block">Afficher</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

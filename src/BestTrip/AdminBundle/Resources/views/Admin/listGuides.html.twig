@@ -1,0 +1,35 @@
+{% extends "::admin.html.twig" %}
+
+{% block header %}Liste des guides{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <table class="table">
+                        <tr>
+                            <th>Titre</th>
+                            <th>Description</th>
+                            <th>Date d'ajout</th>
+                            <th>Utilisateur</th>
+                            <th>Actions</th>
+                        </tr>
+                        {% for guide in guides %}
+                            <tr class="{% if guide.valid %}alert-success{% else %}alert-danger{% endif %}">
+                                <td>{{ guide.titre }}</td>
+                                <td>{{ guide.description }}</td>
+                                <td>{{ guide.dateCreation | date('d-m-Y H:i') }}</td>
+                                <td><a href="#">{{ guide.user.nom | upper }} {{ guide.user.prenom }}</a></td>
+                                <td>
+                                    <a href="{{ path('guide_show', { 'id': guide.id }) }}"
+                                       class="btn btn-primary btn-block">Afficher</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

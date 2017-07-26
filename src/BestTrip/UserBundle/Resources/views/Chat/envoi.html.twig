@@ -1,0 +1,18 @@
+<h1>envoyer msg</h1>
+<form method="post" action="">
+    <p>
+        <label>Contenu</label> : <textarea name="contenu"></textarea>
+        <label>Destinataire</label> :
+
+        <SELECT name="destinataire" size="1">  
+            {% for i in users %}     
+                <OPTION value="{{i.id}}">{{ i.nom }} {{ i.prenom }}</option>
+
+                {% endfor %}
+        </SELECT>
+
+
+
+        <input type="submit" value="envoyer">
+    </p>
+</form>

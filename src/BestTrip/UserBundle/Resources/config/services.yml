@@ -1,0 +1,5 @@
+services:
+    best_user.registration.form.type:
+        class: BestTrip\UserBundle\Form\Type\RegistrationFormType
+        tags:
+            - { name: form.type, alias: user_registration }

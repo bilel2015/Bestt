@@ -1,0 +1,14 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: mysql-best-trip.alwaysdata.net
+    database_port: null
+    database_name: best-trip_root
+    database_user: best-trip
+    database_password: root
+    mailer_transport: smtp
+    mailer_host: smtp.gmail.com
+    mailer_user: besttripthecrew@gmail.com
+    mailer_password: pidev2015
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt

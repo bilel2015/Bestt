@@ -1,0 +1,23 @@
+admin:
+    resource: "@AdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+experience:
+    resource: "@ExperienceBundle/Resources/config/routing.yml"
+    prefix:   /
+
+user:
+    resource: "@UserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+guide:
+    resource: "@GuideBundle/Resources/config/routing.yml"
+    prefix:   /
+
+site:
+    resource: "@SiteBundle/Resources/config/routing.yml"
+    prefix:   /
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    

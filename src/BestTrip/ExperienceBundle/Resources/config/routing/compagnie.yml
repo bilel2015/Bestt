@@ -1,0 +1,40 @@
+compagnie:
+    path:     /compagnie/
+    defaults: { _controller: "ExperienceBundle:Compagnie:index" }
+
+compagnie_show:
+    path:     /compagnie/{id}/show
+    defaults: { _controller: "ExperienceBundle:Compagnie:show" }
+
+compagnie_new:
+    path:     /admin/compagnie/new
+    defaults: { _controller: "ExperienceBundle:Compagnie:new" }
+
+compagnie_create:
+    path:     /admin/compagnie/create
+    defaults: { _controller: "ExperienceBundle:Compagnie:create" }
+    requirements: { _method: post }
+
+compagnie_edit:
+    path:     /admin/compagnie/{id}/edit
+    defaults: { _controller: "ExperienceBundle:Compagnie:edit" }
+
+compagnie_update:
+    path:     /admin/compagnie/{id}/update
+    defaults: { _controller: "ExperienceBundle:Compagnie:update" }
+    requirements: { _method: post|put }
+
+compagnie_delete:
+    path:     /admin/compagnie/{id}/delete
+    defaults: { _controller: "ExperienceBundle:Compagnie:delete" }
+    requirements: { _method: post|delete }
+compagnie_recommend:
+    path:     /compagnie/{compagnie}/recommend
+    defaults: { _controller: "ExperienceBundle:Compagnie:recommend" }
+
+compagnie_vote:
+    path:     /compagnie/{compagnie}/vote
+    defaults: { _controller: "ExperienceBundle:Compagnie:vote" }
+compagnie_comment:
+    path:     /compagnie/{compagnie}/comment
+    defaults: { _controller: "ExperienceBundle:Compagnie:comment" }    

@@ -1,0 +1,42 @@
+experience:
+    path:     /
+    defaults: { _controller: "ExperienceBundle:Experience:index" }
+
+experience_show:
+    path:     /{id}/show
+    defaults: { _controller: "ExperienceBundle:Experience:show" }
+
+experience_new:
+    path:     /new
+    defaults: { _controller: "ExperienceBundle:Experience:new" }
+
+experience_create:
+    path:     /create
+    defaults: { _controller: "ExperienceBundle:Experience:create" }
+    requirements: { _method: post }
+
+experience_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "ExperienceBundle:Experience:edit" }
+
+experience_update:
+    path:     /{id}/update
+    defaults: { _controller: "ExperienceBundle:Experience:update" }
+    requirements: { _method: post|put }
+
+experience_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "ExperienceBundle:Experience:delete" }
+    requirements: { _method: post|delete }
+
+experience_vote:
+    path:     /{experience}/vote
+    defaults: { _controller: "ExperienceBundle:Experience:vote" }
+
+experience_comment:
+    path:     /{experience}/comment
+    defaults: { _controller: "ExperienceBundle:Experience:comment" }
+    
+experience_reclamation:
+    path:     /{experience}/reclamation
+    defaults: { _controller: "ExperienceBundle:Experience:signaler" }

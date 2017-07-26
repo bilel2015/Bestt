@@ -1,0 +1,63 @@
+user:
+    path:     /admin/user/
+    defaults: { _controller: "UserBundle:User:index" }
+
+user_show:
+    path:     /user/{id}/show
+    defaults: { _controller: UserBundle:User:show }
+
+user_new:
+    path:     /user/new
+    defaults: { _controller: UserBundle:User:new }
+
+user_create:
+    path:     /user/create
+    defaults: { _controller: UserBundle:User:create }
+    requirements: { _method: post }
+
+user_edit:
+    path:     /user/{id}/edit
+    defaults: { _controller: UserBundle:User:edit }
+
+user_update:
+    path:     /user/{id}/update
+    defaults: { _controller: UserBundle:User:update }
+    requirements: { _method: post|put }
+
+user_delete:
+    path:     /user/{id}/delete
+    defaults: { _controller: UserBundle:User:delete }
+    requirements: { _method: post|delete }
+
+user_activate:
+    path:     /admin/user/{id}/activate
+    defaults: { _controller: UserBundle:User:activate }
+
+rechercheuser:
+    path:     /admin/user/recherche
+    defaults: { _controller: UserBundle:User:recherche }
+
+rechercheusermail:
+    path:     /user/rechmail
+    defaults: { _controller: UserBundle:User:findUser }
+
+fos_user_change_password:
+    path:     /user/setting
+    defaults: { _controller: UserBundle:User:settingsPassword }
+
+
+flux_rss:
+    path:     /rss
+    defaults: { _controller: UserBundle:User:fluxRss }
+
+voir_plus:
+    path:     /plus
+    defaults: { _controller: UserBundle:User:voirPlus }
+
+test:
+    path:     /test
+    defaults: { _controller: UserBundle:User:testAutoComplete }
+
+show_test:
+    path:     /show_test
+    defaults: { _controller: UserBundle:User:showTest }

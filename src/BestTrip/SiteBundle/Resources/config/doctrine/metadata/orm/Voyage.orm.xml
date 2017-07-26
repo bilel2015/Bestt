@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Voyage" table="voyage">
+        <indexes>
+            <index name="fk_experience" columns="id_experience"/>
+            <index name="ville_depart" columns="ville_depart,ville_arrivee"/>
+            <index name="ville_depart_2" columns="ville_depart"/>
+            <index name="ville_arrivee" columns="ville_arrivee"/>
+        </indexes>
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="dateDepart" type="string" column="date_depart" length="255" nullable="true"/>
+        <field name="dateArrivee" type="string" column="date_arrivee" length="255" nullable="true"/>
+        <field name="saison" type="string" column="saison" length="255" nullable="true"/>
+        <field name="compagnieDeVoyage" type="integer" column="compagnie_de_voyage" nullable="true"/>
+        <field name="moyenDeTransport" type="string" column="moyen_de_transport" length="255" nullable="true"/>
+        <many-to-one field="villeDepart" target-entity="Ville">
+            <join-columns>
+                <join-column name="ville_depart" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="villeArrivee" target-entity="Ville">
+            <join-columns>
+                <join-column name="ville_arrivee" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-one field="idExperience" target-entity="Experience">
+            <join-columns>
+                <join-column name="id_experience" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-many field="idCommentaire" target-entity="Commentaire" mapped-by="idVoyage"/>
+    </entity>
+</doctrine-mapping>

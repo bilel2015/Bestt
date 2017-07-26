@@ -1,0 +1,113 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <!-- Breakcrumb -->
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li><a href="{{ path('lieu') }}">Lieux</a></li>
+            <li>Ajout d'un lieu</li>
+        </ul>
+    </section>
+    <section class="contact-page margin-top">
+        <div class="row">
+            <!-- Hotel Right -->
+            <div class='col-md-3'>
+            </div>
+            {{ form_errors(form) }}
+            <form action="{{ path('lieu_create') }}" class="form-contact" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <table class="table">
+                            {% for flashMessage in app.session.flashbag.get('error_image') %}
+                                <tr class="alert alert-danger">
+                                    <td colspan="2">
+                                        {{ flashMessage }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>Type</td>
+                                <td>
+                                    <select name="typeL" id="typeL" def>
+                                        <option value="H" selected="selected">Hotel</option>
+                                        <option value="R">Restaurant</option>
+                                        <option value="M">Monument</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nom</td>
+                                <td>{{ form_widget(form.nom, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>{{ form_widget(form.description, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Adresse</td>
+                                <td>{{ form_widget(form.adresse, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Ville</td>
+                                <td>{{ form_widget(form.ville, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Image</td>
+                                <td><input type="file" name="imageName" class="" required=""/></td>
+
+                            </tr>
+
+                            <tr class="hotel">
+                                <td>Nombre Etoiles</td>
+                                <td><input class="form-control hotel" name="hotel" type="number"/></td>
+                            </tr>
+                            <tr class="restaurant hidden">
+                                <td>Spécialité</td>
+                                <td><input class="form-control restaurant hidden" name="resto" type="text"/></td>
+                            </tr>
+                            <tr class="monument hidden">
+                                <td>Histoire</td>
+                                <td><textarea class="form-control monument hidden" name="monument"></textarea></td>
+                            </tr>
+                            <tr id="lastRow">
+                                <td></td>
+                                <td>
+                                    <button class="btn btn-success" type="submit">Valider</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#typeL').change(function () {
+            if ($("#typeL").val() == 'H') {
+                $('.hotel').removeClass('hidden');
+                $('.monument').addClass('hidden');
+                $('.restaurant').addClass('hidden');
+            }
+            if ($('#typeL').val() == 'R') {
+                $('.hotel').addClass('hidden');
+                $('.monument').addClass('hidden');
+                $('.restaurant').removeClass('hidden');
+            }
+            if ($('#typeL').val() == 'M') {
+                $('.hotel').addClass('hidden');
+                $('.monument').removeClass('hidden');
+                $('.restaurant').addClass('hidden');
+            }
+
+
+        });
+    </script>
+{% endblock %}

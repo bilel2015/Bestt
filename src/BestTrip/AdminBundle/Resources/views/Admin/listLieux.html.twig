@@ -1,0 +1,37 @@
+{% extends "::admin.html.twig" %}
+
+{% block header %}Liste des lieux{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <table class="table">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Adresse</th>
+                            <th>Ville</th>
+                            <th>Utilisateur</th>
+                            <th>Actions</th>
+                        </tr>
+                        {% for l in lieux %}
+                            <tr class="{% if l.valid %}alert-success{% else %}alert-danger{% endif %}">
+                                <td>{{ l.nom }}</td>
+                                <td>{{ l.description }}</td>
+                                <td>{{ l.adresse }}</td>
+                                <td>{{ l.ville.nom }}</td>
+                                <td><a href="#">{{ l.user.nom | upper }} {{ l.user.prenom }}</a></td>
+                                <td>
+                                    <a href="{{ path('lieu_show', { 'id': l.id }) }}"
+                                       class="btn btn-primary btn-block">Afficher</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

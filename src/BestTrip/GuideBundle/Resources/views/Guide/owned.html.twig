@@ -1,0 +1,300 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+    <div class="row">
+
+    <!-- Hotel Right -->
+    <div class="col-md-9 col-md-push-3">
+
+        <!-- Breakcrumb -->
+        <section class="breakcrumb-sc">
+            <ul class="breadcrumb arrow">
+                <li><a href="#"><i class="fa fa-home"></i></a></li>
+                <li><a href="#" title="">Guides</a></li>
+                <li><a href="#" title="">Europe </a></li>
+                <li>Netherlands</li>
+            </ul>
+        </section>
+        <!-- End Breakcrumb -->
+
+        <!-- Hotel List -->
+        <section class="hotel-list">
+
+            <!-- Sort by and View by -->
+            <div class="sort-view clearfix">
+                <!-- Sort by -->
+                <form class="sort-by float-left" action="{{ path('my_guide') }}" method="post">
+                    <table>
+                        <tr>
+                            <td>
+                                <label>Trier par: </label>
+                            </td>
+                            <td>
+                                <div class="sort-select select float-left">
+                                    <div class="radio-checkbox">
+                                        <input id="titre-sort" type="radio" class="radio radio-sort" value="titre"
+                                               name="sort"/>
+                                        <label style="line-height: 30px; font-weight: 400;"
+                                               for="titre-sort">Titre</label>
+                                    </div>
+                                </div>
+                                <div class="sort-select select float-left">
+                                    <div class="radio-checkbox">
+                                        <input id="eval-sort" type="radio" class="radio radio-sort" value="rating"
+                                               name="sort"/>
+                                        <label style="line-height: 30px; font-weight: 400;"
+                                               for="eval-sort">Évaluation</label>
+                                    </div>
+                                </div>
+                                <div class="sort-select select float-left">
+                                    <div class="radio-checkbox">
+                                        <input id="date-sort" type="radio" class="radio radio-sort" value="dateCreation"
+                                               checked name="sort"/>
+                                        <label style="line-height: 30px; font-weight: 400;" for="date-sort">Date de
+                                            publication</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Ordonner: </label>
+                            </td>
+                            <td>
+                                <div class="sort-select select float-left">
+                                    <div class="radio-checkbox">
+                                        <input id="asc-sort" type="radio" class="radio radio-sort" value="asc" checked
+                                               name="order"/>
+                                        <label style="line-height: 30px; font-weight: 400;"
+                                               for="asc-sort">Croissant</label>
+                                    </div>
+                                </div>
+                                <div class="sort-select select float-left">
+                                    <div class="radio-checkbox">
+                                        <input id="desc-sort" type="radio" class="radio radio-sort" value="desc"
+                                               name="order"/>
+                                        <label style="line-height: 30px; font-weight: 400;"
+                                               for="desc-sort">Descendant</label>
+                                    </div>
+                                </div>
+
+                                <div class="sort-select select float-left">
+                                    <button class="awe-btn awe-btn-small awe-search">Trier</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </form>
+                <!-- End Sort by -->
+            </div>
+            <!-- End Sort by and View by -->
+
+            <!-- Hotel Grid Content-->
+            <div class="hotel-grid-cn clearfix">
+                {% for entity in entities %}
+
+                    <!-- Hotel Item -->
+                    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+                        <div class="hotel-item">
+                            <figure class="hotel-img">
+                                {% if entity.image %}
+                                <a href="{{ path('guide_show', { 'id': entity.id }) }}" title="" >
+                                    <img src="{{ asset(entity.image.path) }}" alt="">
+                                </a>
+                                {% endif %}
+                            </figure>
+                            <div class="hotel-text">
+                                <div class="hotel-name {% if entity.valid %}check-valid{% endif %}">
+                                    <a href="{{ path('guide_show', { 'id': entity.id }) }}"
+                                       class="">{{ entity.titre }}</a> -
+                                    <span class="star">
+                                    {% if entity.rating != 0 %}
+                                        {% for  i in 1.. entity.rating %}
+                                            <i class="fa fa-star"></i>
+                                        {% endfor %}
+
+                                    {% if (entity.rating|round(0, 'floor')) != 0 and entity.rating / (entity.rating|round(0,'floor'))  != 1  and entity.rating != (entity.rating|round(0,'floor')) %}
+                                        <i class="fa fa-star-half-full"></i>
+                                    {% endif %}
+                                    {% else %}
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    {% endif %}
+                                    </span>
+                                </div>
+                                <hr class="hr">
+                                <div class="price-box">
+                                    <span class="price old-price">Publié par</span>
+                                    <span class="price special-price">{{ entity.user.nom | upper }} {{ entity.user.prenom }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Hotel Item -->
+                {% endfor %}
+
+            </div>
+            {{ knp_pagination_render(entities) }}
+
+
+        </section>
+        <!-- End Hotel List -->
+
+    </div>
+    <!-- End Hotel Right -->
+
+    <!-- Sidebar Hotel -->
+    <div class="col-md-3 col-md-pull-9">
+        <!-- Sidebar Content -->
+        <div class="sidebar-cn">
+            <!-- Search Result -->
+            {# <div class="search-result">
+                 <p>
+                     We found <br>
+                     <ins>640</ins>
+                     <span>properties availability</span>
+                 </p>
+             </div>#}
+            <!-- End Search Result -->
+            <!-- Search Form Sidebar -->
+            <form action="{{ path('my_guide') }}" method="get">
+                <div class="search-sidebar">
+                    <div class="row">
+                        <div class="form-search clearfix">
+                            <div class="form-field col-md-12">
+                                <label for="destination"><span>Pays:</span> </label>
+                                <input type="text" id="destination" name="pays" class="field-input">
+                            </div>
+                            <div class="form-field col-md-12">
+                                <label for="destination"><span>Titre:</span> </label>
+                                <input type="text" id="destination" name="titre" class="field-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Search Form Sidebar -->
+                <!-- Narrow your results -->
+                <div class="narrow-results">
+                    <h6>Affinez vos résultats</h6>
+
+                    <div class="narrow-form">
+                            <input type="text" name="description" class="narrow-input" placeholder="La description contient:">
+                    </div>
+                </div>
+                <!-- End Narrow your results -->
+                <!-- Star rating-->
+                <div class="widget-sidebar start-rating-sidebar">
+                    <h4 class="title-sidebar">Évaluation</h4>
+                    <ul class="widget-rate">
+                        <li>
+                            <div class="radio-checkbox">
+                                <input id="rating-5" type="radio" value="5" name="stars" class="radio"/>
+                                <label for="rating-5"></label>
+                            </div>
+                            <div class="group-star">
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                            </div>
+                            5 Stars
+                            <span>12</span>
+                        </li>
+                        <li>
+                            <div class="radio-checkbox">
+                                <input id="rating-4" type="radio" value="4" name="stars" class="radio"/>
+                                <label for="rating-4"></label>
+                            </div>
+                            <div class="group-star">
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                            </div>
+                            4 Stars
+                            <span>12</span>
+                        </li>
+                        <li>
+                            <div class="radio-checkbox">
+                                <input id="rating-3" type="radio" value="3" name="stars" class="radio"/>
+                                <label for="rating-3"></label>
+                            </div>
+                            <div class="group-star">
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                            </div>
+                            3 Stars
+                            <span>12</span>
+                        </li>
+                        <li>
+                            <div class="radio-checkbox">
+                                <input id="rating-2" type="radio" value="2" name="stars"  class="radio"/>
+                                <label for="rating-2"></label>
+                            </div>
+                            <div class="group-star">
+                                <i class="glyphicon glyphicon-star"></i>
+                                <i class="glyphicon glyphicon-star"></i>
+                            </div>
+                            2 Stars
+                            <span>12</span>
+                        </li>
+                        <li>
+                            <div class="radio-checkbox">
+                                <input id="rating-1" type="radio" value="1" name="stars"  class="radio"/>
+                                <label for="rating-1"></label>
+                            </div>
+                            <div class="group-star">
+                                <i class="glyphicon glyphicon-star"></i>
+                            </div>
+                            1 Stars
+                            <span>12</span>
+                        </li>
+                        <li>
+                            <div class="radio-checkbox">
+                                <input id="rating-6" type="radio" value="0" name="stars" class="radio"/>
+                                <label for="rating-6"></label>
+                            </div>
+                            <div class="group-star">
+                                <i class="glyphicon glyphicon-star-empty"></i>
+                            </div>
+                            Not Rated
+                            <span>12</span>
+                        </li>
+                    </ul>
+
+                    <div class="form-submit col-md-12 margin-bottom">
+                        <button type="submit" class="awe-btn awe-btn-medium awe-search">Rechercher</button>
+                    </div>
+                </div>
+                <!-- End Star rating -->
+            </form>
+        </div>
+        <!-- End Sidebar Content -->
+    </div>
+    <!-- End Sidebar Hotel -->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#<script>#}
+    {#$('.radio-sort').change(function(){#}
+    {#$.ajax({#}
+    {#type: "GET",#}
+    {#url: "{{ path('guide_sort') }}",#}
+    {#data: "critere="+$('.radio-sort:checked').val(),#}
+    {#success: function(server_response){#}
+
+    {#}#}
+
+    {#})#}
+    {#});#}
+    {#</script>#}
+{% endblock %}

@@ -1,0 +1,3 @@
+guide_guide:
+    resource: "@GuideBundle/Resources/config/routing/guide.yml"
+    prefix:   /guide

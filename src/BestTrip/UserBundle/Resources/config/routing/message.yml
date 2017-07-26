@@ -1,0 +1,50 @@
+envoyer_msg:
+    path:     /envoyer
+    defaults: { _controller: UserBundle:Message:envoi }
+
+boite_reception:
+    path:     /boite_reception
+    defaults: { _controller: UserBundle:Message:affReception }
+
+boite_envoi:
+    path:     /boite_envoie
+    defaults: { _controller: UserBundle:Message:affEnvoi }
+supprimer_reception:
+    path:     /supp1/{id}
+    defaults: { _controller: UserBundle:Message:supprimer_reception }
+
+supprimer_envoi:
+    path:     /supp2/{id}
+    defaults: { _controller: UserBundle:Message:supprimer_envoi }
+
+choix:
+    path:     /choix
+    defaults: { _controller: UserBundle:Message:choisir }
+
+conversation:
+    path:     /conversation
+    defaults: { _controller: UserBundle:Message:conversation }
+
+conversation_by_user:
+    path:     /convUser/{user}
+    defaults: { _controller: UserBundle:Message:conversationByUser }
+
+conversation_by_user_create:
+    path:     /convUser/{user}/create
+    defaults: { _controller: UserBundle:Message:msgCreate }
+
+derniers_messages:
+    path:     /
+    defaults: { _controller: UserBundle:Message:DernierMsg }
+
+marquer_lus:
+    path:     /marquer
+    defaults: { _controller: UserBundle:Message:Marquer }
+    
+ajax_Pop_Up:
+    path:     /pop
+    defaults: { _controller: UserBundle:Message:ajaxPopUp }
+    
+envoyer_pop_up:
+    path:     /envoyerPop
+    defaults: { _controller: UserBundle:Message:envoiPopUp }

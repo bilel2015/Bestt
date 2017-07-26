@@ -1,0 +1,19 @@
+user_user:
+    resource: "@UserBundle/Resources/config/routing/user.yml"
+    prefix:   /
+
+messages:
+    resource: "@UserBundle/Resources/config/routing/message.yml"
+    prefix:   /messages
+
+newsletter_redirection:
+    path:     /redirection
+    defaults: { _controller: UserBundle:Newsletter:redirection }
+
+newsletter_sendMail:
+    path:     /admin/sendMail
+    defaults: { _controller: UserBundle:Newsletter:sendMail }
+
+newsletter:
+    path: /subscribe
+    defaults: { _controller: UserBundle:Newsletter:subscribe }

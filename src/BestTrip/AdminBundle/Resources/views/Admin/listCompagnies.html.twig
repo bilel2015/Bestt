@@ -1,0 +1,53 @@
+{% extends "::admin.html.twig" %}
+
+{% block header %}Liste des compagnies de voyages{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-info" href="{{ path('compagnie_new') }}">
+                Ajouter une nouvelle compagnie de voyage
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Rating</th>
+                            <th>Nombre de récommendations</th>
+                            <th>Nombre non récommendations</th>
+                            <th>Nbombre des rating</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for entity in entities %}
+                            <tr>
+                                <td>{{ entity.nom }}</td>
+                                <td>{{ entity.rating }}</td>
+                                <td>{{ entity.nbrRec }}</td>
+                                <td>{{ entity.nbrNonRec }}</td>
+                                <td>{{ entity.nbrRating }}</td>
+                                <td>
+                                    <a class="btn btn-info" href="{{ path('compagnie_show', { 'id': entity.id }) }}">Afficher</a>
+
+                                    <a class="btn btn-warning" href="{{ path('compagnie_edit', { 'id': entity.id }) }}">Modifier</a>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

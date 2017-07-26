@@ -1,0 +1,42 @@
+lieu:
+    path:     /
+    defaults: { _controller: "GuideBundle:Lieu:index" }
+
+lieu_show:
+    path:     /{id}/show
+    defaults: { _controller: "GuideBundle:Lieu:show" }
+
+lieu_new:
+    path:     /new
+    defaults: { _controller: "GuideBundle:Lieu:new" }
+
+lieu_create:
+    path:     /create
+    defaults: { _controller: "GuideBundle:Lieu:create" }
+    requirements: { _method: post }
+
+lieu_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "GuideBundle:Lieu:edit" }
+
+lieu_update:
+    path:     /{id}/update
+    defaults: { _controller: "GuideBundle:Lieu:update" }
+    requirements: { _method: post|put }
+
+lieu_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "GuideBundle:Lieu:delete" }
+    requirements: { _method: post|delete }
+
+lieu_recommend:
+    path:     /{lieu}/recommend
+    defaults: { _controller: "GuideBundle:Lieu:recommend" }
+
+lieu_vote:
+    path:     /{lieu}/vote
+    defaults: { _controller: "GuideBundle:Lieu:vote" }
+
+lieu_comment:
+    path:     /{lieu}/comment
+    defaults: { _controller: "GuideBundle:Lieu:comment" }

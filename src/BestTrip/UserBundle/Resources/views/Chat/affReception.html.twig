@@ -1,0 +1,97 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    
+    
+     <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+                       <li>
+                <form method="post" action="{{path("conversation",{'id':idd})}}">
+            <p>
+
+                <label>Voir conversation avec </label> :
+
+                <SELECT name="user" size="1">  
+                    {% for i in users %}     
+                        <OPTION value="{{i.id}}">{{ i.nom }} {{ i.prenom }}</option>
+
+                    {% endfor %}
+                </SELECT>
+
+
+            <td><button type="submit">Choisir</button></td>
+
+
+            </p>
+        </form>
+                </li>
+            
+            
+        </ul>
+    </section>
+    
+    
+<div class="flight-list-head">
+                                    
+                                    <h3>Boite de reception ({{nonLus}} non lus)</h3>
+                     
+                                    
+                                <p>    <a href="{{path("marquer_lus")}}" >
+                                                            Marquer tous comme lus </a></p>
+                                    
+                                
+                                    
+                                </div>
+								
+								
+	<div class="flight-list-cn">
+                                    <div class="responsive-table scroll-table" tabindex="5000" style="overflow: hidden; outline: none;">
+                                        <table class="table flight-table table-radio">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">  Contenu</th>
+                                                    <th>Nom et Prenom</th>
+                                                    
+                                                    <th>date</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                      {% for i in msg %}
+
+                                                <tr>
+                                                    <td class="text-center">
+                                                       
+                                                         {% if (i.contenu|length >40)%}
+                                                 {{i.contenu|slice(0, 40)}} ...
+                                                   {% else %}
+                                                     {{i.contenu|slice(0, 40)}}
+                                                      {% endif %}
+                                                        
+                                                        
+                                                       
+                                                    </td>
+                                                    <td class="td-airline">
+                                                         {{i.emetteur.nom}} {{i.emetteur.prenom}}
+                                                        
+                                                    </td>
+                                                    <td class="td-time">
+                                                       {{i.date|date("d-m-Y H:i")}}
+                                                    </td>
+                                                    <td> 
+                                                        <a href="{{path("conversation_by_user",{'user':i.emetteur.id})}}" class="awe-btn awe-btn-lager btn-success">
+                                                            Voir Message</a>
+                                                    </td>
+                                                    <td> 
+                                                        <a href="{{path("supprimer_reception",{'id':i.id})}}" class="awe-btn awe-btn-lager btn-success">
+                                                            Supprimer Message</a>
+                                                    </td>
+                                                </tr>
+                                                    {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>							
+
+{% endblock -%}

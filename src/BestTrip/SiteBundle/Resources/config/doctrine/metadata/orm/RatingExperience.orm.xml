@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="RatingExperience" table="rating_experience">
+        <indexes>
+            <index name="fk_e_r" columns="id_experience"/>
+        </indexes>
+        <id name="idUser" type="integer" column="id_user"/>
+        <id name="idExperience" association-key="true"/>
+        <one-to-one field="idExperience" target-entity="Experience">
+            <join-columns>
+                <join-column name="id_experience" referenced-column-name="id"/>
+            </join-columns>
+        </one-to-one>
+    </entity>
+</doctrine-mapping>

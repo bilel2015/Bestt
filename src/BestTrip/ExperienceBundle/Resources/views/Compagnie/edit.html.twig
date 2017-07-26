@@ -1,0 +1,16 @@
+{% extends '::admin.html.twig' %}
+
+{% block body -%}
+    <h1>Compagnie edit</h1>
+
+    {{ form(edit_form) }}
+
+        <ul class="table">
+    <li>
+        <a href="{{ path('compagnie') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

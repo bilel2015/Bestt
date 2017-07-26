@@ -1,0 +1,23 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% block body %}
+    <!-- Breakcrumb -->
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="#"><i class="fa fa-home"></i></a></li>
+            <li><a href="#" title="">Guides</a></li>
+            <li><a href="#" title="">Europe </a></li>
+            <li>Netherlands</li>
+        </ul>
+    </section>
+    <div class="row">
+        <!-- Hotel Right -->
+        <div class="col-md-6 col-md-push-3">
+    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+    <p>{{ 'username'|trans }}: {{ user.username }}</p>
+    <p>{{ 'email'|trans }}: {{ user.email }}</p>
+    {% if app.session is not empty %}
+        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
+        {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
+    {% endif %}
+{% endblock  %}

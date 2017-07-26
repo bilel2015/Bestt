@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hotel Detail</title>
+    <!-- Font Google -->
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400%7COpen+Sans:300,400,900,400Italic,600italic,600,700'
+          rel='stylesheet' type='text/css'>
+    <!-- End Font Google -->
+    <!-- Library CSS -->
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset("bundles/site/css/library/font-awesome.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("bundles/site/css/library/bootstrap.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("bundles/site/css/library/jquery-ui.min.css") }}">
+        <link rel="stylesheet" href="{{ asset("bundles/site/css/library/owl.carousel.css") }}">
+        <!-- End Library CSS -->
+        <link rel="stylesheet" href="{{ asset("bundles/site/css/style.css") }}">
+    {% endblock %}
+</head>
+<body>
+<!-- Preloader -->
+<div id="preloader">
+    <div class="tb-cell">
+        <div id="page-loading">
+            <div></div>
+            <p>Loading</p>
+        </div>
+    </div>
+</div>
+<!-- Wrap -->
+<div id="wrap">
+
+<!-- Header -->
+<header id="header" class="header">
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo float-left">
+            <a href="#" title=""><img src="{{ asset("bundles/site/images/logo-header.png") }}"
+                                      alt=""></a>
+        </div>
+        <!-- End Logo -->
+        <!-- Bars -->
+        <div class="bars" id="bars"></div>
+        <!-- End Bars -->
+
+        <!--Navigation-->
+        <nav class="navigation nav-c" id="navigation" data-menu-type="1200">
+            <div class="nav-inner">
+                <a href="{{ path('homepage') }}" class="bars-close" id="bars-close">Close</a>
+
+                <div class="tb">
+                    <div class="tb-cell">
+                        <ul class="menu-list text-uppercase">
+                            <li>
+                                <a href="{{ path('homepage') }}" title="">Acceuil</a>
+                            </li>
+                            <li>
+                                <a href="#">Experiences</a>
+                                <ul class="sub-menu">
+                                    <li><a href="{{ path('experience') }}" title="">Toutes les expériences</a></li>
+                                    <li><a href="{{ path('experience_new') }}" title="">Ajouter une expériences</a></li>
+                                </ul>
+                            <li>
+                                <a href="#">Compagnie de voyage</a>
+                                <ul class="sub-menu">
+                                    <li><a href="{{ path('compagnie') }}" title="">Toutes les compagnies</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Guides</a>
+                                <ul class="sub-menu">
+                                    <li><a href="{{ path('guide') }}" title="">Tous les guides</a></li>
+                                    {% if is_granted('ROLE_USER') and not(is_granted('ROLE_ADMIN')) %}
+                                        <li><a href="{{ path('my_guide') }}" title="">Mes guides</a></li>
+                                        <li><a href="{{ path('my_contrib_guide') }}" title="">Mes contributions</a></li>
+                                        <li><a href="{{ path('guide_new') }}" title="">Ajouter un guide</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#" title="">Lieux</a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="{{ path('lieu') }}" title="">Tous les lieux</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li>
+                                    <a href="{{ path('admin_homepage') }}" title=""><i class="fa fa-dashboard"></i></a>
+                                </li>
+                            {% endif %}
+                            {% if is_granted('ROLE_USER') %}
+                                <li>
+                                    <a href="#" title=""><i
+                                                class="fa fa-envelope">{{ render(controller('UserBundle:Message:nonLus')) }}</i></a>
+                                    <ul class="sub-menu">
+                                        <li>
+                                            <a href="{{ path('derniers_messages') }}">Derniers messages</a>
+                                        </li>
+                                        <li>
+                                            <a onclick="$msg1.getUsers()" href="#" data-toggle="modal" id="popup"
+                                               data-target="#myModal">Envoyer Message</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="{{ path('fos_user_profile_show') }}" title=""><i class="fa fa-male"></i></a>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a href="{{ path('flux_rss') }}" title=""><i class="fa fa-rss"></i></a>
+                            </li>
+                            <li>
+                                {% if app.user %}
+                                    <a href="{{ path('fos_user_security_logout') }}" title="">Se déconnecter</a>
+                                {% else %}
+                                    <a href="{{ path('fos_user_security_login') }}" title="">Se connecter</a>
+                                {% endif %}
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!--End Navigation-->
+    </div>
+</header>
+<!-- End Header -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Liste des utilisateur : </h4>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div id="notif"></div>
+                <select id="usersAjax" name="user" class="form-control">
+
+                </select>
+                <LABEL FOR="textMsg">Contenu :</LABEL>
+                <textarea class="form-control" id="textMsg"></textarea>
+            </div>
+
+
+            <div class="modal-footer">
+                <table class="float-right">
+                    <tr>
+                        <td class="">
+                            <button href="#" onclick="$msg1.envoiMsg()" type="button"
+                                    class="margin-right btn btn-default">
+                                Envoyer
+                            </button>
+                        </td>
+                        <td style="text-indent:20px;">
+                            <input id="test" type="text" class="form-control" placeholder="Ou chercher ici"
+                                   onkeyup="$rss.getUtilisateur()">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Header -->
+
+
+<!--Banner-->
+<section class="banner">
+
+    <!--Background-->
+    <div class="bg-parallax bg-1"></div>
+    <!--End Background-->
+
+    <div class="container">
+
+        <div class="logo-banner text-center">
+            <a href="#" title="">
+                <img src="images/logo-banner.png" alt="">
+            </a>
+        </div>
+
+        <!-- Banner Content -->
+    </div>
+    <!-- End Banner Content -->
+</section>
+<!--End Banner-->
+
+<!-- Sales -->
+<section class="sales">
+    <!-- Title -->
+    <div class="title-wrap">
+        <div class="container">
+            <div class="travel-title float-left">
+                <h2>Les guides les plus récents: </h2>
+            </div>
+            <a href="{{ path('guide') }}" title=""
+               class="awe-btn awe-btn-5 awe-btn-lager arrow-right text-uppercase float-right">Voir tous les guides</a>
+        </div>
+    </div>
+    <!-- End Title -->
+    <!-- Hot Sales Content -->
+    <div class="container">
+        <div class="sales-cn">
+            <div class="row">
+                {% for k,g in guides %}
+                    <!-- HostSales Item -->
+                    <div class="{% if k == 2 or k == 3 %}col-md-6{% else %}col-xs-6 col-md-3{% endif %}">
+                        <div class="sales-item">
+                            <figure class="home-sales-img">
+                                <a href="{{ path('guide_show', { 'id': g.id }) }}" title="">
+                                    <img src="{{ asset(g.image.path) }}" height="126px" alt="">
+                                </a>
+                            </figure>
+                            <div class="home-sales-text">
+                                <div class="home-sales-name-places">
+                                    <div class="home-sales-name">
+                                        <a href="{{ path('guide_show', { 'id': g.id }) }}"
+                                           class="">{{ g.titre }}</a> -
+                                    <span class="star">
+                                    {% if g.rating != 0 %}
+                                        {% for  i in 1.. g.rating %}
+                                            <i class="fa fa-star"></i>
+                                        {% endfor %}
+
+                                    {% if (g.rating|round(0, 'floor')) != 0 and g.rating / (g.rating|round(0,'floor'))  != 1  and g.rating != (g.rating|round(0,'floor')) %}
+                                        <i class="fa fa-star-half-full"></i>
+                                    {% endif %}
+                                    {% else %}
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    {% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="home-sales-places">
+                                        <a href="#" title="">{{ g.pays.nom }}</a>
+                                        <a href="#" title="">Massachusetts</a>
+                                    </div>
+                                </div>
+                                <div class="price-box">
+                                    <span class="price old-price">Publié par</span>
+                                    <span class="price special-price">{{ g.user.nom | upper }} {{ g.user.prenom }}</span>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End HostSales Item -->
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- End Hot Sales Content -->
+</section>
+<!-- End Sales -->
+
+<!-- Travel Destinations -->
+<section class="destinations">
+
+<!-- Title -->
+<div class="title-wrap">
+    <div class="container">
+        <div class="travel-title float-left">
+            <h2>Les lieux proposés par nos clients:</h2>
+        </div>
+        <a href="{{ path('lieu') }}" title="" class="awe-btn awe-btn-5 arrow-right awe-btn-lager text-uppercase float-right">Voir tous les lieux</a>
+    </div>
+</div>
+<!-- End Title -->
+
+<!-- Destinations Content -->
+<div class="destinations-cn">
+
+<!-- Background -->
+<div class="bg-parallax bg-2"></div>
+<!-- End Background -->
+
+<div class="container">
+<div class="row">
+<!-- Destinations Filter -->
+
+<!-- End Destinations Filter -->
+<!-- Destinations Grid -->
+<div class="col-md-12">
+<div class="tab-content destinations-grid">
+<!-- Tab One -->
+<div id="lieu-1" class="clearfix tab-pane fade active in ">
+    {% for lieu in lieux %}
+    <!-- Destinations Item -->
+    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+        <div class="destinations-item ">
+            <figure class="destinations-img">
+                <a href="{{ path('lieu_show', {'id':lieu.id}) }}" title="">
+                    <img src="{{ asset(lieu.image.path) }}" alt="">
+                </a>
+            </figure>
+            <div class="destinations-text">
+                <div class="destinations-name">
+                    <a href="{{ path('lieu_show', {'id':lieu.id}) }}" title="">{{ lieu.ville.nom }}</a> -
+                <span class="properties-nb">
+                    {% if lieu.isHotel %}
+                        Hotel
+                    {% elseif lieu.isResto %}
+                        Restaurant
+                    {% else %}
+                        Monument
+                    {% endif %}
+                </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End Destinations Item -->
+    {% endfor %}
+</div>
+<!-- End Tab One -->
+<!-- Tab Two -->
+<div id="destinations-2" class="clearfix tab-pane fade">
+    <!-- Destinations Item -->
+    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+        <div class="destinations-item ">
+            <div class="destinations-text">
+                <div class="destinations-name">
+                    <a href="#" title="">London - UK</a>
+                </div>
+                                                <span class="properties-nb">
+                                                    <ins>1289</ins> properties
+                                                </span>
+            </div>
+            <figure class="destinations-img">
+                <a href="#" title="">
+                    <img src="images/destinations/img-1.jpg" alt="">
+                </a>
+            </figure>
+        </div>
+    </div>
+    <!-- End Destinations Item -->
+    <!-- Destinations Item -->
+    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+        <div class="destinations-item">
+            <div class="destinations-text">
+                <div class="destinations-name">
+                    <a href="#" title="">Paris - France</a>
+                </div>
+                                                <span class="properties-nb">
+                                                    239 properties
+                                                </span>
+            </div>
+            <figure class="destinations-img">
+                <a href="#" title="">
+                    <img src="images/destinations/img-2.jpg" alt="">
+                </a>
+            </figure>
+        </div>
+    </div>
+    <!-- End Destinations Item -->
+    <!-- Destinations Item -->
+    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+        <div class="destinations-item">
+            <div class="destinations-text">
+                <div class="destinations-name">
+                    <a href="#" title="">Rome - Italy</a>
+                </div>
+                                                <span class="properties-nb">
+                                                    478 properties
+                                                </span>
+            </div>
+            <figure class="destinations-img">
+                <a href="#" title="">
+                    <img src="images/destinations/img-3.jpg" alt="">
+                </a>
+            </figure>
+        </div>
+    </div>
+    <!-- End Destinations Item -->
+    <!-- Destinations Item -->
+    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+        <div class="destinations-item">
+            <div class="destinations-text">
+                <div class="destinations-name">
+                    <a href="#" title="">Barcelona - Spain</a>
+                </div>
+                                                <span class="properties-nb">
+                                                    452 properties
+                                                </span>
+            </div>
+            <figure class="destinations-img">
+                <a href="#" title="">
+                    <img src="images/destinations/img-4.jpg" alt="">
+                </a>
+            </figure>
+        </div>
+    </div>
+    <!-- End Destinations Item -->
+    <!-- Destinations Item -->
+    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+        <div class="destinations-item">
+            <div class="destinations-text">
+                <div class="destinations-name">
+                    <a href="#" title="">Madrid - Spain</a>
+                </div>
+                                                <span class="properties-nb">
+                                                    794 properties
+                                                </span>
+            </div>
+            <figure class="destinations-img">
+                <a href="#" title="">
+                    <img src="images/destinations/img-5.jpg" alt="">
+                </a>
+            </figure>
+        </div>
+    </div>
+    <!-- End Destinations Item -->
+    <!-- Destinations Item -->
+    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+        <div class="destinations-item">
+            <div class="destinations-text">
+                <div class="destinations-name">
+                    <a href="#" title="">Vienna - Austria</a>
+                </div>
+                                                <span class="properties-nb">
+                                                    1289 properties
+                                                </span>
+            </div>
+            <figure class="destinations-img">
+                <a href="#" title="">
+                    <img src="images/destinations/img-6.jpg" alt="">
+                </a>
+            </figure>
+        </div>
+    </div>
+    <!-- End Destinations Item -->
+</div>
+<!-- End Tab Two -->
+</div>
+</div>
+<!-- ENd Destinations Grid -->
+</div>
+</div>
+</div>
+<!-- End Destinations Content -->
+</section>
+<!-- End Travel Destinations -->
+
+<!-- Travel Magazine -->
+<section class="magazine">
+</section>
+<!-- End Travel Magazine -->
+
+<!-- Confidence and Subscribe  -->
+<section class="confidence-subscribe">
+    <!-- Background -->
+    <div class="bg-parallax bg-3"></div>
+    <!-- End Background -->
+    <div class="container">
+        <div class="row cs-sb-cn">
+
+            <!-- Confidence -->
+            <div class="col-md-6">
+                <div class="confidence">
+
+                </div>
+            </div>
+            <!-- End Confidence -->
+            <!-- Subscribe -->
+            <div class="col-md-6">
+                <div class="subscribe">
+                    <h3>S'inscrire à la newsletter</h3>
+
+                    <p>En vous inscrivant à notre newsletter, nous allons vous tenir au courant de toutes nos actualités</p>
+                    <!-- Subscribe Form -->
+                    {{ render(controller('UserBundle:Newsletter:subscribe')) }}
+                    <!-- End Subscribe Form -->
+                    <!-- Follow us -->
+
+                    <!-- Follow us -->
+                </div>
+            </div>
+            <!-- End Subscribe -->
+
+        </div>
+    </div>
+</section>
+<!-- End Confidence and Subscribe  -->
+
+<!-- Footer -->
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <!-- Logo -->
+            <div class="col-md-4 col-lg-push-4">
+                <div class="logo-foter">
+                    <a href="{{ path('homepage') }}" title="">
+                        <img src="{{ asset("bundles/site/images/logo-footer.png") }}" alt=""></a>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- End Footer Currency, Language -->
+    </div>
+</footer>
+<!-- End Footer -->
+
+</div>
+
+{% block javascripts %}
+    <!-- Library JS -->
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/jquery.min.js") }}"></script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/jquery-ui.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/bootstrap.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/owl.carousel.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/parallax.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/jquery.nicescroll.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/jquery.ui.touch-punch.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/library/SmoothScroll.js") }}"></script>
+    <!-- End Library JS -->
+    <!-- Main Js -->
+    <script type="text/javascript" src="{{ asset("bundles/site/js/script.js") }}"></script>
+    <!-- End Main Js -->
+
+    <script>
+        $msg1 = {
+            getUsers: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ path('ajax_Pop_Up')}}",
+                    success: function (server_response) {
+                        $('#usersAjax').html(server_response
+                        );
+                    }
+                });
+            },
+            envoiMsg: function () {
+                var name = $('#usersAjax').val();
+
+                // Check if empty of not
+                if (name == -1) {
+                    alert('Text-field is empty.');
+                    return false;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: "{{ path('envoyer_pop_up')}}",
+                    data: "contenu=" + $('#textMsg').val() + "&user=" + $('#usersAjax').val(),
+                    success: function (server_response) {
+                        $('#notif').html(server_response);
+                    }
+                });
+            }
+        };
+
+
+        $rss = {
+            getUtilisateur: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ path('test')}}",
+                    data: "contenu=" + $('#test').val(),
+                    success: function (server_response) {
+                        $('#usersAjax').html(server_response);
+                        $('#textMsg').html("");
+                        $('#myModal').close();
+                    }
+                });
+            }
+        };
+
+
+    </script>
+
+
+
+{% endblock %}
+</body>
+
+</html>

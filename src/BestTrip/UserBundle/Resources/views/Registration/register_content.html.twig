@@ -1,0 +1,80 @@
+{% extends '::base.html.twig' %}
+{% trans_default_domain 'FOSUserBundle' %}
+{% block body %}
+    <!-- Breakcrumb -->
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li><a href="#" title="">Inscription</a></li>
+        </ul>
+    </section>
+    <div class="row">
+        <!-- Hotel Right -->
+        <div class="col-md-6 col-md-push-3">
+
+            <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+                <table class="table">
+                    <tr>
+                        <td colspan="2" class="alert-info">Informations Personnelles</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Nom
+                        </td>
+                        <td>{{ form_widget(form.nom, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Prenom
+                        </td>
+                        <td>{{ form_widget(form.prenom, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            Sexe
+                        </td>
+                        <td>{{ form_widget(form.sexe, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Biographie
+
+                        </td>
+                        <td>{{ form_widget(form.bio, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="alert-info">Informations du compte</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            E-mail
+                        </td>
+                        <td>{{ form_widget(form.email, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Identifiant
+                        </td>
+                        <td>{{ form_widget(form.username, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Mot de passe</td>
+                        <td>{{ form_widget(form.plainPassword.first, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Confirmer le mdp</td>
+                        <td>{{ form_widget(form.plainPassword.second, {'attr' : {'class':'form-control'} }) }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>   <input type="submit"  class="btn btn-warning btn-block" value="{{ 'Confirmer'|trans }}"/> </td>
+
+                    </tr>
+                </table>
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}

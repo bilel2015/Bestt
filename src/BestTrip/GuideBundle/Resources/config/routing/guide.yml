@@ -1,0 +1,67 @@
+guide:
+    path:     /
+    defaults: { _controller: "GuideBundle:Guide:index" }
+
+my_guide:
+    path:     /owned
+    defaults: { _controller: "GuideBundle:Guide:owned" }
+
+my_contrib_guide:
+    path:     /contribution
+    defaults: { _controller: "GuideBundle:Guide:contributions" }
+
+guide_show:
+    path:     /{id}/show
+    defaults: { _controller: "GuideBundle:Guide:show" }
+
+guide_new:
+    path:     /new
+    defaults: { _controller: "GuideBundle:Guide:new" }
+
+guide_create:
+    path:     /create
+    defaults: { _controller: "GuideBundle:Guide:create" }
+    requirements: { _method: post }
+
+guide_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "GuideBundle:Guide:edit" }
+
+guide_update:
+    path:     /{id}/update
+    defaults: { _controller: "GuideBundle:Guide:update" }
+    requirements: { _method: post|put }
+
+guide_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "GuideBundle:Guide:delete" }
+    requirements: { _method: post|delete }
+
+ajouter_ville_guide:
+    path: /ajax/ville/pays
+    defaults: { _controller: "GuideBundle:Guide:ajaxPaysVille" }
+
+ajouter_lieu_guide:
+    path: /ajax/lieu/pays
+    defaults: { _controller: "GuideBundle:Guide:ajaxPaysLieu" }
+
+guide_contribute:
+    path:     /{id}/contribute
+    defaults: { _controller: "GuideBundle:Guide:contribute" }
+
+guide_contribute_update:
+    path:     /{id}/contribute/update
+    defaults: { _controller: "GuideBundle:Guide:contributeCreate" }
+    requirements: { _method: post|put }
+
+guide_recommend:
+    path:     /{guide}/recommend
+    defaults: { _controller: "GuideBundle:Guide:recommend" }
+
+guide_vote:
+    path:     /{guide}/vote
+    defaults: { _controller: "GuideBundle:Guide:vote" }
+
+guide_comment:
+    path:     /{guide}/comment
+    defaults: { _controller: "GuideBundle:Guide:comment" }

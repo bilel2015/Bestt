@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Lieu" table="lieu">
+        <indexes>
+            <index name="fk_ville" columns="id_ville"/>
+        </indexes>
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="adresse" type="string" column="adresse" length="255" nullable="true"/>
+        <field name="description" type="string" column="description" length="255" nullable="true"/>
+        <field name="nom" type="string" column="nom" length="255" nullable="true"/>
+        <field name="rating" type="float" column="rating" precision="10" scale="0" nullable="true"/>
+        <field name="histoire" type="string" column="histoire" length="255" nullable="true"/>
+        <field name="nombreEtoiles" type="integer" column="nombre_etoiles" nullable="true"/>
+        <field name="specialite" type="string" column="specialite" length="255" nullable="true"/>
+        <field name="isHotel" type="boolean" column="is_hotel" nullable="true"/>
+        <field name="isResto" type="boolean" column="is_resto" nullable="true"/>
+        <field name="isMonument" type="boolean" column="is_monument" nullable="true"/>
+        <field name="nbrRec" type="integer" column="nbr_rec" nullable="true"/>
+        <field name="nbrNonRec" type="integer" column="nbr_non_rec" nullable="true"/>
+        <field name="nbrRating" type="integer" column="nbr_rating" nullable="true"/>
+        <many-to-one field="idVille" target-entity="Ville">
+            <join-columns>
+                <join-column name="id_ville" referenced-column-name="id"/>
+            </join-columns>
+        </many-to-one>
+        <many-to-many field="idCommentaire" target-entity="Commentaire" mapped-by="idLieu"/>
+    </entity>
+</doctrine-mapping>

@@ -1,0 +1,23 @@
+{% extends "::admin.html.twig" %}
+{% block header %}
+    <h4>Ajouter une Compagnie</h4>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <div class="box-header"></div>
+
+                {{ form(form) }}
+
+                <ul class="table">
+                    <li>
+                        <a href="{{ path('compagnie') }}">
+                            Back to the list
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

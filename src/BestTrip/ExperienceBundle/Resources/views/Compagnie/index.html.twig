@@ -1,0 +1,92 @@
+{% extends '::base.html.twig' %}
+        {% block stylesheets %}
+
+            {{ parent() }}
+            <link rel="stylesheet" href="{{ asset("bundles/site/css/jquery.dataTables.css") }}">
+            <link rel="stylesheet" href="{{ asset("bundles/site/css/jquery.dataTables.min.css") }}">
+            <link rel="stylesheet" href="{{ asset("bundles/site/css/jquery.dataTables_themeroller.css") }}">
+
+        {% endblock %}
+{% block body -%}
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li>Compagnies de voyages
+            </li>
+        </ul>
+    </section>
+
+
+
+
+    <div class="flight-list-head" style="margin-top:0; margin-bottom:10px">
+
+        <h3 class="text-center">Liste des compagnies de voyages</h3>
+
+    </div>
+
+
+    <div class="flight-list-cn">
+        <div class="responsive-table scroll-table" tabindex="5000" style="overflow: hidden; outline: none;">
+            <table class="table flight-table table-radio" id="tableRss" data-page-length='5'>
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Rating</th>
+                    <th>Nombre de récommendations</th>
+                    <th>Nombre non récommendations</th>
+                    <th>Nbombre des rating</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ entity.nom }}</td>
+                        <td>{{ entity.rating }}</td>
+                        <td>{{ entity.nbrRec }}</td>
+                        <td>{{ entity.nbrNonRec }}</td>
+                        <td>{{ entity.nbrRating }}</td>
+                        <td>
+                            <a class="btn btn-info" href="{{ path('compagnie_show', { 'id': entity.id }) }}">Afficher</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+{% endblock -%}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset("bundles/site/js/jquery.dataTables.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("bundles/site/js/jquery.dataTables.min.js") }}"></script>
+
+
+
+
+    <script>
+        $('#tableRss').DataTable();
+        $rss = {
+            getPlus: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ path('voir_plus')}}",
+                    data: "contenu=" + $('#arg'),
+                    success: function (server_response) {
+                        $('#notif').html(server_response);
+                    }
+                });
+            }
+        };
+
+    </script>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li>Mes derniers messages
+            </li>
+        </ul>
+    </section>
+
+
+
+
+    <ul class="breadcrumb arrow margin-top margin-left">
+        <li>
+            <form method="post" action="{{ path("conversation") }}">
+                <table>
+                    <tr>
+                        <td>&nbsp;&nbsp;Pour voir une conversation avec quelqu'un, veuillez taper son nom: &nbsp;</td>
+                        <td>
+                            <select id="Usercontainer" name="user" class="form-control">
+                                <option value="-1"></option>
+                                {% for i in users %}
+                                    <OPTION value="{{ i.id }}">{{ i.nom }} {{ i.prenom }}</option>
+
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>&nbsp;</td>
+                        <td style="text-indent:20px;"><input id="test" type="text" class="form-control"
+                                                             onkeyup="$rss.getPlus()"></td>
+                        <td>&nbsp;
+                            <button type="submit" class="btn btn-success">Choisir</button>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </form>
+        </li>
+
+
+    </ul>
+
+    <div class="flight-list-head" style="margin-top:0; margin-bottom:10px">
+
+        <h3>Derniers messages &nbsp;</h3> <span> ({{ nonLus }} non lus)</span>
+
+
+    </div>
+
+
+    <div class="flight-list-cn">
+        <div class="responsive-table scroll-table" tabindex="5000" style="overflow: hidden; outline: none;">
+            <table class="table flight-table table-radio">
+                <thead>
+                <tr>
+                    <th class="text-center"> Contenu</th>
+                    <th>Nom et Prenom</th>
+
+                    <th>date</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in matrice %}
+
+                    {% if (i.message.lu==0 and i.message.destinataire==app.user) %}
+
+                        <tr class="alert-danger">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                    <td class="text-center">
+
+                        {% if (i.message.contenu|length >40) %}
+                            {{ i.message.contenu|slice(0, 40) }} ...
+                        {% else %}
+                            {{ i.message.contenu|slice(0, 40) }}
+                        {% endif %}
+
+
+                    </td>
+                    <td class="td-airline">
+                        {{ i.user.nom }} {{ i.user.prenom }}
+
+                    </td>
+                    <td class="td-time">
+                        {{ i.message.date|date("d-m-Y H:i") }}
+                    </td>
+                    <td>
+                        <a href="{{ path("conversation_by_user",{'user':i.user.id}) }}"
+                           class="awe-btn awe-btn-lager btn-success">
+                            Voir Message</a>
+                    </td>
+                    </tr>
+
+
+
+
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock -%}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $rss = {
+            getPlus: function () {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ path('test')}}",
+                    data: "contenu=" + $('#test').val(),
+                    success: function (server_response) {
+                        $('#Usercontainer').html(server_response);
+                    }
+                });
+            }
+        };
+
+
+        $('form').submit(function () {
+
+            // Get the Login Name value and trim it
+            var name = $('#Usercontainer').val();
+
+            // Check if empty of not
+            if (name == -1) {
+                alert('Text-field is empty.');
+                return false;
+            }
+        });
+
+
+    </script>
+{% endblock %}

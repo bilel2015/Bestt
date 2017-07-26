@@ -1,0 +1,4 @@
+services:
+    twig.extension:
+        class: BestTrip\SiteBundle\Twig\Extension\VarsExtension
+        arguments: ["@service_container"]

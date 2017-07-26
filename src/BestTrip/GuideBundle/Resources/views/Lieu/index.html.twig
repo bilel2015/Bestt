@@ -1,0 +1,97 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+
+<div class="row">
+
+    <!-- Hotel Right -->
+    <div class="col-md-12">
+        <section class="breakcrumb-sc">
+            <ul class="breadcrumb arrow">
+                <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+                <li>Lieux</li>
+            </ul>
+        </section>
+        <!-- Breakcrumb -->
+
+        <!-- End Breakcrumb -->
+
+        <!-- Hotel List -->
+        <section class="hotel-list">
+            <!-- Hotel Grid Content-->
+            <div class="hotel-grid-cn clearfix">
+                {% for entity in entities %}
+
+                    <!-- Hotel Item -->
+                    <div class="col-xs-6 col-sm-4 col-md-6 col-lg-4">
+                        <div class="hotel-item">
+                            <figure class="hotel-img">
+                                {% if entity.image %}
+                                    <a href="{{ path('lieu_show', { 'id': entity.id }) }}" nom="">
+                                        <img src="{{ asset(entity.image.path) }}" alt="">
+                                    </a>
+                                {% endif %}
+                            </figure>
+                            <div class="hotel-text">
+                                <div class="hotel-name ">
+                                    <a href="{{ path('lieu_show', { 'id': entity.id }) }}"
+                                       class="">{{ entity.nom }}</a> -
+                                    <span class="star">
+                                    {% if entity.rating != 0 %}
+                                        {% for  i in 1.. entity.rating %}
+                                            <i class="fa fa-star"></i>
+                                        {% endfor %}
+
+                                    {% if (entity.rating|round(0, 'floor')) != 0 and entity.rating / (entity.rating|round(0,'floor'))  != 1  and entity.rating != (entity.rating|round(0,'floor')) %}
+                                        <i class="fa fa-star-half-full"></i>
+                                    {% endif %}
+                                    {% else %}
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    {% endif %}
+                                    </span>
+                                </div>
+                                <hr class="hr">
+                                <div class="price-box">
+                                    <span class="price old-price">Publié par</span>
+                                    <span class="price special-price">{{ entity.user.nom | upper }} {{ entity.user.prenom }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Hotel Item -->
+                {% endfor %}
+
+            </div>
+            {{ knp_pagination_render(entities) }}
+
+
+        </section>
+        <!-- End Hotel List -->
+
+    </div>
+    <!-- End Hotel Right -->
+
+    <!-- Sidebar Hotel -->
+
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        {#<script>#}
+        {#$('.radio-sort').change(function(){#}
+        {#$.ajax({#}
+        {#type: "GET",#}
+        {#url: "{{ path('lieu_sort') }}",#}
+        {#data: "critere="+$('.radio-sort:checked').val(),#}
+        {#success: function(server_response){#}
+
+        {#}#}
+
+        {#})#}
+        {#});#}
+        {#</script>#}
+    {% endblock %}

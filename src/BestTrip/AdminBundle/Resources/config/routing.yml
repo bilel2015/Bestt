@@ -1,0 +1,49 @@
+admin_homepage:
+    path:     /
+    defaults: { _controller: AdminBundle:Default:index }
+
+list_guides:
+    path:     /listGuides
+    defaults: { _controller: AdminBundle:Admin:listGuides }
+
+list_experience:
+    path:     /listExperience
+    defaults: { _controller: AdminBundle:Admin:listExperience }
+
+list_lieux:
+    path:     /listLieux
+    defaults: { _controller: AdminBundle:Admin:listLieux }
+
+list_compagnies:
+    path:     /listCompagnies
+    defaults: { _controller: AdminBundle:Admin:listCompagnies }
+
+notifs:
+    path:     /notifs
+    defaults: { _controller: AdminBundle:Admin:note }
+
+note_redirect:
+    path:     /notifs/redirect/{id}/{relatedTo}/{id_note}
+    defaults: { _controller: AdminBundle:Admin:redirect }
+
+valider_guide:
+    path:     /guide/{guide}/{valid}/valider
+    defaults: { _controller: AdminBundle:Admin:validerGuide }
+
+valider_experience:
+    path:     /experience/{experience}/{valid}/valider
+    defaults: { _controller: AdminBundle:Admin:validerExp }
+
+valider_lieu:
+    path:     /lieu/{lieu}/{valid}/valider
+    defaults: { _controller: AdminBundle:Admin:validerLieu }
+
+__grapheChartLine:
+    path:     /chartLine
+    defaults: { _controller: AdminBundle:Graphe:chartLine }
+__grapheHistogramme:
+    path:     /histogramme
+    defaults: { _controller: AdminBundle:Graphe:chartHistogramme }
+__graphePie:
+    path:     /pie
+    defaults: { _controller: AdminBundle:Graphe:chartPie }

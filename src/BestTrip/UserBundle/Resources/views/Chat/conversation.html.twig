@@ -1,0 +1,101 @@
+{% extends '::base.html.twig' %}
+ {% block stylesheets %}
+     {{ parent() }}
+     <link rel="stylesheet" href="{{ asset("bundles/user/css/chat.css") }}">
+ {% endblock %}
+{% block body -%}
+
+
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li><a href="{{ path('derniers_messages') }}">Mes derniers messages</a></li>
+            <li>
+                Conversation avec : &nbsp;&nbsp;{{ user.prenom }} {{ user.nom }}
+            </li>
+        </ul>
+    </section>
+
+
+    <div class="flight-list-cn chat-container">
+        <section class="module">
+            <ol class="discussion">
+                {% for i in msg %}
+                    {% if (i.emetteur.getId() == myId) %}
+                        <li class="self">
+                            <div class="avatar">
+                                {% if i.emetteur.image %}
+                                    <img src='{{ asset(i.emetteur.image.path) }}' width='200px' class='float-left'/>
+
+                                {% else %}
+                                    <img src='{{ asset('images/profile/prof.png') }}' width='200px' class='float-left'/>
+                                {% endif %}
+                            </div>
+                            <div class="messages">
+                                <p>{{ i.contenu }}</p>
+                                <time datetime="2009-11-13T20:00">Moi • {{ i.date | date('d-m-Y H:i') }}</time>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="other">
+                            <div class="avatar">
+                                {% if i.emetteur.image %}
+                                    <img src='{{ asset(i.emetteur.image.path) }}' width='200px' class='float-left'/>
+
+                                {% else %}
+                                    <img src='{{ asset('images/profile/prof.png') }}' width='200px' class='float-left'/>
+                                {% endif %}                            </div>
+                            <div class="messages">
+                                <p>{{ i.contenu }}</p>
+                                <time datetime="2009-11-13T20:00">{{ i.emetteur }}
+                                    • {{ i.date | date('d-m-Y H:i') }}</time>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                <li class="hidden new-msg"></li>
+            </ol>
+
+        </section>
+        <hr/>
+        <div class="">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <textarea class="form-control resize-off" name="contenu" id="contenu" cols="20" rows="6"
+                                      required="required"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button onclick="$msg.envoiMsg()" class="btn btn-default float-right margin-top margin-bottom">Envoyer
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+        </div>
+    </div>
+{% endblock -%}
+
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    $msg = {
+        envoiMsg: function () {
+            $.ajax({
+                type: "GET",
+                url: "{{ path('conversation_by_user_create', {'user':user.id}) }}",
+                data: "contenu=" + $('#contenu').val(),
+                success: function (server_response) {
+                    $('.new-msg').before(server_response
+                    );
+                }
+            });
+        }
+    };
+
+</script>
+{% endblock %}
+

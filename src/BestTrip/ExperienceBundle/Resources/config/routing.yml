@@ -1,0 +1,8 @@
+experience_compagnie:
+    resource: "@ExperienceBundle/Resources/config/routing/compagnie.yml"
+    prefix:   /
+
+experience_experience:
+    resource: "@ExperienceBundle/Resources/config/routing/experience.yml"
+    prefix:   /experience
+

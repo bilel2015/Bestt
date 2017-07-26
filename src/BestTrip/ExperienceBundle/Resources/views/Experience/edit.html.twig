@@ -1,0 +1,278 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <!-- Breakcrumb -->
+    <section class="breakcrumb-sc">
+        <ul class="breadcrumb arrow">
+            <li><a href="{{ path('homepage') }}"><i class="fa fa-home"></i></a></li>
+            <li><a href="{{ path('experience') }}" title="">Experiences </a></li>
+            <li><a href="#" title="">Edition - {{ entity.titre }}</a></li>
+        </ul>
+    </section>
+    <!-- End Breakcrumb -->
+    <section class="contact-page bg-diamond">
+        <div class="contact-cn">
+            <h2>Edition de l'experience #{{ entity.id }}</h2>
+            {{ form_errors(edit_form) }}
+            <form action="{{ path('experience_update', {'id':entity.id}) }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT">
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <table class="table">
+                            {% for flashMessage in app.session.flashbag.get('error_image') %}
+                                <tr class="alert alert-danger">
+                                    <td colspan="2">
+                                        {{ flashMessage }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td>Titre</td>
+                                <td>{{ form_widget(edit_form.titre, {'attr' : {'class':'form-control', 'id':'titre'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>{{ form_widget(edit_form.description, {'attr' : {'class':'form-control'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Image</td>
+                                <td><input type="file" name="imageName" value=""/></td>
+                            </tr>
+                            <tr>
+                                <td>Pays</td>
+                                <td>{{ form_widget(edit_form.depenses, {'attr' : {'class':'form-control', 'required':'required'} }) }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button class="awe-btn awe-btn-1 arrow-right arrow-white awe-btn-lager"
+                                            type="submit">Mettre à jour l'experience
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <input type="hidden" value="{{nbVoyages}}" name="nbre-instances-voyage" id="nbre-instances-voyage"/>
+
+                    <div class="col-md-6">
+                        {% for i in voyages %}
+                            <!-- Accordion 1 -->
+                            <div class="panel">
+                                <div class="panel-heading" id="heading{{ loop.index0 }}">
+                                    <h4 class="panel-title">
+                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ loop.index0 }}">
+                                            Voyage #{{loop.index0*1+1}}
+                                            <span class="icon fa fa-angle-down"></span>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse{{ loop.index0 }}" class="panel-collapse collapse" aria-labelledby="heading{{ loop.index0 }}">
+                                    <div class="panel-body">
+                                        <!-- kk -->
+                                        <table class="table">
+                                            <tr>
+                                                <td>Date de départ</td>
+                                                <td> <input type="text" name="dateDepart{{loop.index0}}" class="field-input calendar-input" placeholder="{{i.dateDepart}}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Date d'arrivée</td>
+                                                <td> <input type="text" name="dateArrivee{{loop.index0}}" class="field-input calendar-input" placeholder="{{i.dateArrivee}}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ville de départ</td>
+                                                <td>
+                                                    <select name="villeDep{{ loop.index0 }}" class="form-control">
+                                                        {% for ivd in villes %}
+                                                            <option value="{{ ivd.id }}"
+                                                                    {% if ivd.id == i.villeDepart.id %}selected{% endif %}>{{ ivd.nom }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ville d'arrivée</td>
+                                                <td>
+                                                    <select name="villeArr{{ loop.index0 }}" class="form-control">
+                                                        {% for iva in villes %}
+                                                            <option value="{{ iva.id }}"
+                                                                    {% if iva.id == i.villeArrivee.id %}selected{% endif %}>{{ iva.nom }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Saison</td>
+                                                <td>
+                                                    <select name="saison{{loop.index0}}">
+                                                        <option value="0" {% if "automne" == i.saison %}selected{% endif %}>Automne</option>
+                                                        <option value="1" {% if "hiver" == i.saison %}selected{% endif %}>Hiver</option>
+                                                        <option value="2" {% if "printemps" == i.saison %}selected{% endif %}>Printemps</option>
+                                                        <option value="3" {% if "ete" == i.saison %}selected{% endif %}>Ete</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>moyen de transport</td>
+                                                <td>
+                                                    <select name="transport{{loop.index0}}">
+                                                        <option value="0" {% if "voiture_personnelle" == i.saison %}selected{% endif %}>Voiture personnelle</option>
+                                                        <option value="1" {% if "train" == i.saison %}selected{% endif %}>Train</option>
+                                                        <option value="2" {% if "avion" == i.saison %}selected{% endif %}>Avion</option>
+                                                        <option value="3" {% if "bateau" == i.saison %}selected{% endif %}>Bateau</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Compagnie</td>
+                                                <td>
+                                                    <select name="compagnie{{loop.index0}}">
+                                                        {% for ic in compagnies %}
+                                                            <option value="{{ic.id}}"
+                                                                    {% if ic.id == i.compagnieDeVoyage.id %}selected{% endif %}>{{ic.nom}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- end kk -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Accordion 1 -->
+                        {% endfor %}
+                        
+                        <input type="hidden" class="hidden other-fields">
+
+                        <button id="voyages" type="button" onclick="$voyages.addForm()"
+                                class="btn btn-default"><i class="fa fa-plus"></i> Un voyage
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </section>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $voyages = {
+            addClose: function (a) {
+                return '<td>' +
+                        '<button type="button" onclick="$voyages.supprimer(this, '+ b +')" class="no-padding btn btn-circle btn-danger">' +
+                        '<i class="fa fa-minus"></i>' +
+                        '</button>' +
+                        '</td>';
+            },
+            supprimer: function (a,b) {
+                $('#vv'+ b).remove();
+            },
+            createLine: function () {
+                b = $('#nbre-instances-voyage').val();
+                line =  '<div class="panel" id="vv'+ b.toString() +'">' +
+                        '<div class="panel-heading" id="heading' + b.toString() + '">' +
+                        '<h4 class="panel-title">' +
+                        '<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse' + b.toString() + '">' +
+                        'Voyage #' + (b*1+1).toString() +
+                        '<span class="icon fa fa-angle-down"></span>' +
+                        '</a>' +
+                        '</h4>' +
+                        '</div>' +
+                        '<div id="collapse' + b.toString() + '" class="panel-collapse collapse" aria-label ledby="heading' + b.toString() + '">' +
+                        '<div c lass="panel-body">' +
+                        '<!-- kk -->' +
+                        '<table class="table">'+
+                        '<tr>' +
+                        '<td>' +
+                        '<div class="form-search clearfix">' +
+                        '<div class="form-field field-date">' +
+                        '<input type="text" name="dateDepart' + b.toString() + '" class="field-input calendar-input" placeholder="Date de départ">' +
+                        '</div>' +
+                        '</div></td>' +
+                        '<td><div class="form-search clearfix">' +
+                        '<div class="form-field field-date">' +
+                        '<input type="text" name="dateArrivee' + b.toString() + '" class="field-input calendar-input" placeholder="Date d\'arrivée">' +
+                        '</div>' +
+                        '</div></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Ville de départ</td>'+
+                        '<td>' +
+                        '<div class="form-search clearfix">' +
+                        '<div class="form-field field-select">' +
+                        '<select name="villeDep' + b.toString() + '">' +
+                        '<option id="" disabled selected>De quelle ville avez-vous déparé ?</option>' +
+                        '{% for t in villes %}' +
+                        '<option value="{{t.id}}">{{t.nom}}</option>' +
+                        '{% endfor %}' +
+                        '</select>' +
+                        '</div>' +
+                        '</div>' +
+                        '</td>' +
+                        '</tr>'+
+                        '<tr>' +
+                        '<td>Ville d\'arrivée</td>'+
+                        '<td>' +
+                        '<select name="villeArr' + b.toString() + '">' +
+                        '<option id="" disabled selected>Vous êtes arrivé à quelle ville ?</option>' +
+                        '{% for y in villes %}' +
+                        '<option value="{{y.id}}">{{y.nom}}</option>' +
+                        '{% endfor %}' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Saison</td>'+
+                        '<td>' +
+                        '<select name="saison' + b.toString() + '">' +
+                        '<option id="" disabled selected>Pendant quelle saison avez-vous voyagé ?</option>' +
+                        '<option name="0">Automne</option>' +
+                        '<option name="1">Hiver</option>' +
+                        '<option name="2">Printemps</option>' +
+                        '<option name="3">Ete</option>' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Moyen de transport</td>'+
+                        '<td>' +
+                        '<select name="transport' + b.toString() + '">' +
+                        '<option id="" disabled selected>Quel moyen de transport avez-vous utilisé ?</option>' +
+                        '<option name="0">Voiture personnelle</option>' +
+                        '<option name="1">Train</option>' +
+                        '<option name="2">Avion</option>' +
+                        '<option name="3">Bateau</option>' +
+                        '</select>' +
+                        '</td>' +
+                        '</tr>' +
+                        '<tr>' +
+                        '<td>Compagnie de voyage</td>'+
+                        '<td>' +
+                        '<select name="compagnie' + b.toString() + '">' +
+                        '<option id="" disabled selected>Avec quelle compagnie avez-vous voyagé ?</option>' +
+                        '{% for e in compagnies %}' +
+                        '<option value="{{e.id}}">{{e.nom}}</option>' +
+                        '{% endfor %}' +
+                        '</select>'+
+                        '</td>'+
+                        '</tr>'+
+                        this.addClose(b)+
+                        '</table>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>';
+                (b)++;
+                $('#nbre-instances-voyage').attr('value', b);
+                return line;
+            },
+            addForm: function () {
+                $('.other-fields').before(this.createLine());
+            }
+        };
+    </script>
+{% endblock %}

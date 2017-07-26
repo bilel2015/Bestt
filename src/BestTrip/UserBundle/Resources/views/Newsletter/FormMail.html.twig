@@ -1,0 +1,32 @@
+{% extends "::admin.html.twig" %}
+{% block header %}
+    Diffusion d'un message à travers la newsletter
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-danger">
+                <div class="box-header"><h4>Nouveau message</h4></div>
+                <form action="{{ path('newsletter_sendMail') }}" method="POST">
+
+                    <table class="table">
+                        <tr>
+                            <td>Sujet:</td>
+                            <td>
+                                <input type="text" class="form-control" name="Subject">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Text</td>
+                            <td><textarea class="form-control" name="message"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><button type="submit" class="btn btn-success btn-block">Envoyer</button></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

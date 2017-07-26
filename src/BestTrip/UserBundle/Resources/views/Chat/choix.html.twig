@@ -1,0 +1,19 @@
+<h1>veuillez choisir l'utilisateur parmi {{users|length}}</h1>
+<form method="post" action="{{path("conversation",{'id':idd})}}">
+    <p>
+
+        <label>User</label> :
+          
+        <SELECT name="user" size="1">  
+            {% for i in users %}     
+                <OPTION value="{{i.id}}">{{ i.nom }} {{ i.prenom }}</option>
+                    
+                {% endfor %}
+        </SELECT>
+
+        
+        <td><button type="submit">choisir</button></td>
+        
+   
+    </p>
+</form>

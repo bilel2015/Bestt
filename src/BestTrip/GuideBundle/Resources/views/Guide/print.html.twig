@@ -1,0 +1,381 @@
+{% extends '::print_layout.html.twig' %}
+
+{% block body -%}
+
+    <section class="head-detail">
+        <div class="head-dt-cn">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="start-address">
+                        <span class="{% if entity.valid %}check-valid1{% endif %}"></span>
+                        <i class="glyphicon glyphicon-alert"></i>
+
+                        <span class="h1{% if entity.valid %} padding-left{% endif %}">{{ entity.titre }}                                <i class="glyphicon glyphicon-alert"></i>
+</span> -
+                        <span class="star">
+                        {% if entity.rating != 0 %}
+                            {% for  i in 1.. entity.rating %}
+                                <i class="glyphicon glyphicon-alert"></i>
+
+                            {% endfor %}
+
+                            {% if (entity.rating|round(0, 'floor')) != 0 and entity.rating / (entity.rating|round(0,'floor'))  != 1  and entity.rating != (entity.rating|round(0,'floor')) %}
+                        {% endif %}
+                            {% else %}
+                        {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Header Detail -->
+
+    <!-- Hotel Content One -->
+    <section class="hotel-content detail-cn" id="hotel-content">
+    <div class="row">
+    <div class="col-lg-3 detail-sidebar">
+        <!-- Hight Light -->
+        <div class="hight-light">
+
+            <h2>Les avis</h2>
+            <!-- Vote Text -->
+            <div class="row">
+
+                <!-- Recommend -->
+                <div class="col-xs-6 col-sm-6 col-md-3 col-lg-6 vote-text">
+                    <p><span>{{ entity.rating | round(1) }}</span></p>
+                    <a href="#" title="">{{ entity.nbrRating }} membres ont noté ce guide</a>
+                </div>
+                <!-- End Recommend -->
+                <!-- Tripadvitsor -->
+                <div class="col-xs-6 col-sm-6 col-md-3 col-lg-6  vote-text">
+                        <span>
+                            <span class="s30">{{ entity.nbrRec }} </span>
+                            <a href="{{ path('guide_recommend', {'guide':entity.id, 'state':1} ) }}">
+                                <span class=" c049905 s30">+</span>
+                            </a>
+                        </span>
+                    <hr/>
+                        <span>
+                            <span class="s30">{{ entity.nbrNonRec }} </span>
+                             <a href="{{ path('guide_recommend', {'guide':entity.id, 'state':-1} ) }}">
+                                 <span class=" cCC0101 s30">-</span>
+                             </a>
+                        </span>
+                </div>
+                <!-- End Tripadvitsor -->
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
+                    <hr class="hr">
+
+                    <!-- Quote -->
+                    <blockquote class="quote-sidebar">
+                        <p>
+                            <strong>Auteur: </strong>
+                            <br/><span>{{ entity.user.nom | upper }} {{ entity.user.prenom }}</span> <br/>
+                            {{ entity.user.bio }}
+                        </p>
+                    </blockquote>
+                    <!-- End Quote -->
+                </div>
+            </div>
+            <!-- End Vote Text -->
+
+
+        </div>
+        <!-- End Hight Light -->
+    </div>
+
+    <div class="col-lg-9 hl-customer-like">
+
+    <h2>Description</h2>
+
+    <!-- Custom link field -->
+    <div class="customer-like">
+        <ul>
+            <li>{{ entity.description }}</li>
+        </ul>
+        {% if entity.contributions | length != 0 %}
+            {% for c in entity.contributions %}
+                <hr/>
+                <ul>
+                    <li>{{ c.descr }}. - <a href="#">{{ c.user.nom }} {{ c.user.prenom }}</a></li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <!-- End Custom link field -->
+    {% if entity.villes | length != 0 %}
+        <h2>Les villes conseillées par ce guide</h2>
+        {% for v in entity.villes %}
+            <div class="hotel-list-item">
+                <figure class="hotel-img float-left">
+                    <a href="hotel-detail.html" title="">
+                        <img src="{{ asset('bundles/site/images/hotel/img-1.jpg') }}" height="100px"
+                             alt="">
+                    </a>
+                </figure>
+                <div class="hotel-text">
+                    <div class="hotel-name">
+                        <a href="hotel-detail.html" title="">{{ v.nom }}</a>
+                    </div>
+                    <div class="hotel-star-address">
+                                <span class="hotel-star">
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                </span>
+                                <span class="rating">
+                                        <ins>{{ v.rating }}</ins><br/>
+                                    {{ v.nbrRating }} avis
+
+                                </span>
+                        <address class="hotel-address">
+                                    <span> <span class="s20">{{ v.nbrRec }} </span>
+                                    <i class="fa fa-thumbs-o-up c049905 s20"></i></span>
+                                <span> <span class="s20">{{ v.nbrNonRec }} </span>
+                                    <i
+                                            class="fa fa-thumbs-o-down cCC0101 s20"></i></span>
+                        </address>
+                    </div>
+
+                </div>
+                {% set nc = v.commentaires | length %}
+                {% if nc == 1 %}
+                    <p>
+                        <a href="#" title="">Voir tous le commentaire</a>
+                    </p>
+                {% elseif nc > 1 %}
+                    <p>
+                        <a href="#" title="">Voir tous les {{ v.commentaires | length }} commentaires</a>
+                    </p>
+                {% else %}
+                    <br/>
+                {% endif %}
+            </div>
+            <hr/>
+        {% endfor %}
+    {% endif %}
+    {% if entity.contributions | length != 0 %}
+        {% if entity.villes | length == 0 %}
+            <h2>Les villes conseillées par ce guide</h2>
+        {% endif %}
+        {% for v1 in entity.contributions %}
+            {% for v in v1.villes %}
+                <div class="hotel-list-item">
+                    <figure class="hotel-img float-left">
+                        <a href="hotel-detail.html" title="">
+                            <img src="{{ asset('bundles/site/images/hotel/img-1.jpg') }}" height="100px"
+                                 alt="">
+                        </a>
+                    </figure>
+                    <div class="hotel-text">
+                        <div class="hotel-name">
+                            <a href="hotel-detail.html" title="">{{ v.nom }}</a> - Ajouté
+                            par: {{ v1.user.nom }} {{ v1.user.prenom }}
+                        </div>
+                        <div class="hotel-star-address">
+                                <span class="hotel-star">
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                </span>
+                                <span class="rating">
+                                        <ins>{{ v.rating }}</ins><br/>
+                                    {{ v.nbrRating }} avis
+
+                                </span>
+                            <address class="hotel-address">
+                                    <span> <span class="s20">{{ v.nbrRec }} </span>
+                                    <i class="fa fa-thumbs-o-up c049905 s20"></i></span>
+                                <span> <span class="s20">{{ v.nbrNonRec }} </span>
+                                    <i
+                                            class="fa fa-thumbs-o-down cCC0101 s20"></i></span>
+                            </address>
+                        </div>
+
+                    </div>
+                    {% set nc = v.commentaires | length %}
+                    {% if nc == 1 %}
+                        <p>
+                            <a href="#" title="">Voir tous le commentaire</a>
+                        </p>
+                    {% elseif nc > 1 %}
+                        <p>
+                            <a href="#" title="">Voir tous les {{ v.commentaires | length }} commentaires</a>
+                        </p>
+                    {% else %}
+                        <br/>
+                    {% endif %}
+                </div>
+                <hr/>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    {% if entity.lieux | length != 0 %}
+        <h2>Les lieux conseillés par ce guide</h2>
+        {% for l in entity.lieux %}
+            <div class="panel">
+                <div class="panel-heading" id="headingOne">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle collapsed" data-toggle="collapse"
+                           data-parent="#accordion{{ l.id }}"
+                           href="#collapseOne{{ l.id }}"
+                           style="background: none repeat scroll 0% 0% rgb(255, 255, 255);">
+                            {% if l.isHotel %}
+                                <span class="num _1">Hôtel</span>
+                            {% elseif l.isResto %}
+                                <span class="num _3">Restaurent</span>
+                            {% elseif l.isMonument %}
+                                <span class="num _2">Monument</span>
+                            {% endif %}
+                            {{ l.nom }}
+                            <span class="icon fa fa-angle-down"></span>
+                        </a>
+                    </h4>
+
+                </div>
+                <div id="collapseOne{{ l.id }}" class="panel-collapse collapse" aria-labelledby="headingOne">
+
+                    <img src="{{ asset('bundles/site/images/hotel/img-1.jpg') }}" height="100px" width="100%"
+                         alt="">
+
+
+                    {{ l.description }}
+
+                    <div class="hotel-text">
+
+                        <div class="hotel-star-address">
+                                    <span class="hotel-star">
+                                        <i class="glyphicon glyphicon-star"></i>
+                                        <i class="glyphicon glyphicon-star"></i>
+                                        <i class="glyphicon glyphicon-star"></i>
+                                        <i class="glyphicon glyphicon-star"></i>
+                                        <i class="glyphicon glyphicon-star"></i>
+                                    </span>
+                                    <span class="rating">
+                                         - {{ l.nbrRating }} avis
+
+                                    </span>
+                                        <span> <span class="s20">{{ l.nbrRec }} </span>
+                                        <i class="fa fa-thumbs-o-up c049905 s20"></i></span>
+                                    <span> <span class="s20">{{ l.nbrNonRec }} </span>
+                                        <i class="fa fa-thumbs-o-down cCC0101 s20"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if  entity.contributions |length != 0 %}
+        {% if entity.lieux | length == 0 %}
+            <h2>Les lieux conseillés par ce guide</h2>
+        {% endif %}
+        <div class="panel-group" id="accordion">
+
+            {% for l1 in entity.contributions %}
+                {% for l in l1.lieux %}
+                    <div class="panel">
+                        <div class="panel-heading" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse"
+                                   data-parent="#accordion{{ l.id }}"
+                                   href="#collapseOne{{ l.id }}"
+                                   style="background: none repeat scroll 0% 0% rgb(255, 255, 255);">
+                                    {% if l.isHotel %}
+                                        <span class="num _1">Hôtel</span>
+                                    {% elseif l.isResto %}
+                                        <span class="num _3">Restaurent</span>
+                                    {% elseif l.isMonument %}
+                                        <span class="num _2">Monument</span>
+                                    {% endif %}
+                                    {{ l.nom }}
+                                    <span class="icon fa fa-angle-down"></span>
+                                </a>
+                            </h4>
+
+                        </div>
+                        <div id="collapseOne{{ l.id }}" class="panel-collapse collapse" aria-labelledby="headingOne">
+
+                            <img src="{{ asset('bundles/site/images/hotel/img-1.jpg') }}" height="100px" width="100%"
+                                 alt="">
+
+
+                            {{ l.description }}
+
+                            <div class="hotel-text">
+
+                                <div class="hotel-name">
+                                    Ajouté
+                                    par: <a href="#">{{ l1.user.nom }} {{ l1.user.prenom }}</a>
+                                </div>
+                                <div class="hotel-star-address">
+                                <span class="hotel-star">
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                    <i class="glyphicon glyphicon-star"></i>
+                                </span>
+                                <span class="rating">
+                                     - {{ l.nbrRating }} avis
+
+                                </span>
+                                    <span> <span class="s20">{{ l.nbrRec }} </span>
+                                    <i class="fa fa-thumbs-o-up c049905 s20"></i></span>
+                                <span> <span class="s20">{{ l.nbrNonRec }} </span>
+                                    <i class="fa fa-thumbs-o-down cCC0101 s20"></i></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+    {% if entity.autres | json_decode | length != 0 or entity.contributions | length != 0 %}
+        <h2>Autres informations</h2>
+        {% set obj = entity.autres | json_decode %}
+        {% for key, content in obj %}
+            <!-- Custom link field -->
+            <div class="customer-like">
+                        <span class="cs-like-label">
+                            {{ key }}
+                        </span>
+                <ul>
+                    <li>{{ content }}</li>
+                </ul>
+            </div>
+            <!-- End Custom link field -->
+        {% endfor %}
+        {% for c in entity.contributions %}
+            {% for key, content in c.autreInfo | json_decode %}
+                <!-- Custom link field -->
+                <div class="customer-like">
+                        <span class="cs-like-label">
+                            {{ key }}
+                        </span>
+                    <ul>
+                        <li>{{ content }}</li>
+                    </ul>
+                </div>
+                <!-- End Custom link field -->
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    </div>
+    </div>
+    </section>
+    {% for image in images %}
+        <img src="{{ asset(image.path) }}" alt="">
+    {% endfor %}
+{% endblock %}
